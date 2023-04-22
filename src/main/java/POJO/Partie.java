@@ -94,11 +94,12 @@ public class Partie implements Serializable {
             return false;
         }
         Partie other = (Partie) object;
-        if (this.codePartie != other.getCodePartie()) {
+        if (this.codePartie != other.codePartie) {
             return false;
         }
         return true;
     }
+
 
     @Override
     public String toString() {

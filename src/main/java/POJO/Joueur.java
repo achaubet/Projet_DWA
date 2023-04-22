@@ -67,13 +67,13 @@ public class Joueur implements Serializable {
     @Column(name = "NB_VICTOIRES")
     private BigInteger nbVictoires;
     @Column(name = "NB_MOYEN_VICTOIRES")
-    private BigInteger nbMoyenVictoires;
+    private Double nbMoyenVictoires;
     @Column(name = "SCORE_MOYEN")
-    private BigInteger scoreMoyen;
+    private Double scoreMoyen;
     @Column(name = "MOY_SUITES_GAGNEES")
-    private BigInteger moySuitesGagnees;
+    private Double moySuitesGagnees;
     @Column(name = "MOY_CV_PERDUES")
-    private BigInteger moyCvPerdues;
+    private Double moyCvPerdues;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "joueur")
     private List<JoueursPartie> joueursPartieList;
 
@@ -140,35 +140,35 @@ public class Joueur implements Serializable {
         this.nbVictoires = nbVictoires;
     }
 
-    public BigInteger getNbMoyenVictoires() {
+    public Double getNbMoyenVictoires() {
         return nbMoyenVictoires;
     }
 
-    public void setNbMoyenVictoires(BigInteger nbMoyenVictoires) {
+    public void setNbMoyenVictoires(Double nbMoyenVictoires) {
         this.nbMoyenVictoires = nbMoyenVictoires;
     }
 
-    public BigInteger getScoreMoyen() {
+    public Double getScoreMoyen() {
         return scoreMoyen;
     }
 
-    public void setScoreMoyen(BigInteger scoreMoyen) {
+    public void setScoreMoyen(Double scoreMoyen) {
         this.scoreMoyen = scoreMoyen;
     }
 
-    public BigInteger getMoySuitesGagnees() {
+    public Double getMoySuitesGagnees() {
         return moySuitesGagnees;
     }
 
-    public void setMoySuitesGagnees(BigInteger moySuitesGagnees) {
+    public void setMoySuitesGagnees(Double moySuitesGagnees) {
         this.moySuitesGagnees = moySuitesGagnees;
     }
 
-    public BigInteger getMoyCvPerdues() {
+    public Double getMoyCvPerdues() {
         return moyCvPerdues;
     }
 
-    public void setMoyCvPerdues(BigInteger moyCvPerdues) {
+    public void setMoyCvPerdues(Double moyCvPerdues) {
         this.moyCvPerdues = moyCvPerdues;
     }
 
