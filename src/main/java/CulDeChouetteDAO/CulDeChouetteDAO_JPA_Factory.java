@@ -9,20 +9,29 @@ package CulDeChouetteDAO;
  * @author Arnaud
  */
 public class CulDeChouetteDAO_JPA_Factory extends CulDeChouetteDAOFactory  {
+    
+    private IJoueur daoJoueur = null;
+    
+    private IPartie daoPartie = null;
+    
+    private IJoueursPartie daoJoueursPartie = null;
 
     @Override
     public IJoueur getDAOJoueur() throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (daoJoueur == null) daoJoueur = new JoueurDAO_JPA();
+            return daoJoueur;
     }
 
     @Override
     public IPartie getDAOPartie() throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (daoPartie == null) daoPartie = new PartieDAO_JPA();
+            return daoPartie;
     }
 
     @Override
     public IJoueursPartie getDAOJoueursPartie() throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (daoJoueursPartie == null) daoJoueursPartie = new JoueursPartieDAO_JPA();
+            return daoJoueursPartie;
     }
     
 }
