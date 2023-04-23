@@ -5,7 +5,7 @@
 package CulDeChouetteDAO;
 
 import POJO.Joueur;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,32 +15,35 @@ public interface IJoueur {
     /**
      * Ajoute un joueur à la base de données (création d'un compte Joueur)
      * @param joueur Le Joueur
-     * @return L'id du joueur attribué par la BDD
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public int ajouterJoueur(Joueur joueur);
+    public void ajouterJoueur(Joueur joueur) throws DAOException;
     /**
      * Modifie un joueur à la base de données (modification du pseudo par exemple)
      * @param joueur Le Joueur
-     * @return L'id du joueur attribué par la BDD
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public int modifierJoueur(Joueur joueur);
+    public void modifierJoueur(Joueur joueur) throws DAOException;
     /**
      * Supprime un joueur de la base de données
-     * @param idJoueur l'identifiant du joueur
+     * @param joueur Le joueur à suppriler
      * @return Vrai si supression ok, sinon Faux
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public boolean supprimerJoueur(int idJoueur);
+    public boolean supprimerJoueur(Joueur joueur) throws DAOException;
     /**
      * Recherche un joueur avec l'id
      * @param idJoueur l'identifiant du joueur
      * @return Le joueur si il existe, sinon null
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public Joueur rechercherJoueurParId(int idJoueur);
+    public Joueur rechercherJoueurParId(int idJoueur) throws DAOException;
     /**
      * Recherche tous les joueurs existants dans la base de données
      * @return La liste des joueurs
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public ArrayList<Joueur> rechercherTousLesJoueurs();
+    public List<Joueur> rechercherTousLesJoueurs()  throws DAOException;
     /**
      * Permet à un joueur de se connecter
      * @param pseudo Le pseudo du joueur

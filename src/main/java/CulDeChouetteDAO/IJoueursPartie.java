@@ -5,7 +5,7 @@
 package CulDeChouetteDAO;
 
 import POJO.JoueursPartie;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,30 +15,33 @@ public interface IJoueursPartie {
     /**
      * Ajoute un JoueursPartie à la base de données
      * @param joueursPartie
-     * @return L'id du JoueursPartie attribué par la base de données
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public int ajouterJoueursPartie(JoueursPartie joueursPartie);
+    public void ajouterJoueursPartie(JoueursPartie joueursPartie) throws DAOException;
     /**
      * Modifie le JoueursPartie
      * @param joueursPartie
-     * @return L'id du JoueursPartie attribué par la base de données
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public int modifierJoueursPartie(JoueursPartie joueursPartie);
+    public void modifierJoueursPartie(JoueursPartie joueursPartie) throws DAOException;
     /**
      * Supprime le JoueursPartie de la base de données
      * @param idJoueursPartie
      * @return Vrai si pas d'erreur, sinon Faux
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public boolean supprimerJoueurPartie(int idJoueursPartie);
+    public boolean supprimerJoueurPartie(int idJoueursPartie) throws DAOException;
     /**
      * Recherche le JoueursPartie
      * @param idJoueursPartie
      * @return Le JoueursPartie si trouvé, sinon null
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public JoueursPartie RechercherJoueursPartieParId(int idJoueursPartie);
+    public JoueursPartie RechercherJoueursPartieParId(int idJoueursPartie) throws DAOException;
     /**
      * Recherche tous les JoueursPartie existants
      * @return La liste de tous les JoueursPartie
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public ArrayList<JoueursPartie> rechercherTousLesJoueursParties();    
+    public List<JoueursPartie> rechercherTousLesJoueursParties() throws DAOException;    
 }

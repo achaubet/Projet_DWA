@@ -6,20 +6,24 @@ package CulDeChouetteDAO;
 
 import POJO.Partie;
 import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
  * @author Arnaud
  */
 public class PartieDAO_JPA implements IPartie {
+    
+    private EntityManagerFactory emf = null;
 
     @Override
-    public int ajouterPartie(Partie partie) {
+    public void ajouterPartie(Partie partie) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public int modifierPartie(Partie partie) {
+    public void modifierPartie(Partie partie) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -36,6 +40,10 @@ public class PartieDAO_JPA implements IPartie {
     @Override
     public ArrayList<Partie> rechercherToutesLesParties() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public PartieDAO_JPA() throws DAOException {
+        this.emf = ConnexionBDD.getEMF();
     }
     
 }

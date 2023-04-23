@@ -6,20 +6,24 @@ package CulDeChouetteDAO;
 
 import POJO.JoueursPartie;
 import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
  * @author Arnaud
  */
 public class JoueursPartieDAO_JPA implements IJoueursPartie {
+    
+    private EntityManagerFactory emf = null;
 
     @Override
-    public int ajouterJoueursPartie(JoueursPartie joueursPartie) {
+    public void ajouterJoueursPartie(JoueursPartie joueursPartie) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public int modifierJoueursPartie(JoueursPartie joueursPartie) {
+    public void modifierJoueursPartie(JoueursPartie joueursPartie) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -36,6 +40,10 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
     @Override
     public ArrayList<JoueursPartie> rechercherTousLesJoueursParties() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public JoueursPartieDAO_JPA() throws DAOException {
+        this.emf = ConnexionBDD.getEMF();
     }
     
 }
