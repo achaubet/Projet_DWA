@@ -21,41 +21,41 @@ public class JoueursPartiePK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODE_JOUEUR")
-    private BigInteger codeJoueur;
+    private int codeJoueur;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODE_PARTIE")
-    private BigInteger codePartie;
+    private int codePartie;
 
     public JoueursPartiePK() {
     }
 
-    public JoueursPartiePK(BigInteger codeJoueur, BigInteger codePartie) {
+    public JoueursPartiePK(int codeJoueur, int codePartie) {
         this.codeJoueur = codeJoueur;
         this.codePartie = codePartie;
     }
 
-    public BigInteger getCodeJoueur() {
+    public int getCodeJoueur() {
         return codeJoueur;
     }
 
-    public void setCodeJoueur(BigInteger codeJoueur) {
+    public void setCodeJoueur(int codeJoueur) {
         this.codeJoueur = codeJoueur;
     }
 
-    public BigInteger getCodePartie() {
+    public int getCodePartie() {
         return codePartie;
     }
 
-    public void setCodePartie(BigInteger codePartie) {
+    public void setCodePartie(int codePartie) {
         this.codePartie = codePartie;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codeJoueur != null ? codeJoueur.hashCode() : 0);
-        hash += (codePartie != null ? codePartie.hashCode() : 0);
+        hash += codeJoueur;
+        hash += codePartie;
         return hash;
     }
 
@@ -66,10 +66,10 @@ public class JoueursPartiePK implements Serializable {
             return false;
         }
         JoueursPartiePK other = (JoueursPartiePK) object;
-        if ((this.codeJoueur == null && other.codeJoueur != null) || (this.codeJoueur != null && !this.codeJoueur.equals(other.codeJoueur))) {
+        if (this.codeJoueur != other.codeJoueur) {
             return false;
         }
-        if ((this.codePartie == null && other.codePartie != null) || (this.codePartie != null && !this.codePartie.equals(other.codePartie))) {
+        if (this.codePartie != other.codePartie) {
             return false;
         }
         return true;

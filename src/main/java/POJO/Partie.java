@@ -94,10 +94,7 @@ public class Partie implements Serializable {
             return false;
         }
         Partie other = (Partie) object;
-        if (this.codePartie != other.codePartie) {
-            return false;
-        }
-        return true;
+        return this.codePartie == other.codePartie;
     }
 
 

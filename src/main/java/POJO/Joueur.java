@@ -5,8 +5,6 @@
 package POJO;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -50,7 +48,7 @@ public class Joueur implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CODE_JOUEUR")
-    private BigDecimal codeJoueur;
+    private int codeJoueur;
     @Size(max = 32)
     @Column(name = "PSEUDO")
     private String pseudo;
@@ -58,37 +56,37 @@ public class Joueur implements Serializable {
     @Column(name = "MDP")
     private String mdp;
     @Column(name = "AGE")
-    private BigInteger age;
+    private int age;
     @Column(name = "SEXE")
-    private Character sexe;
+    private char sexe;
     @Size(max = 50)
     @Column(name = "VILLE")
     private String ville;
     @Column(name = "NB_VICTOIRES")
-    private BigInteger nbVictoires;
+    private int nbVictoires;
     @Column(name = "NB_MOYEN_VICTOIRES")
-    private Double nbMoyenVictoires;
+    private float nbMoyenVictoires;
     @Column(name = "SCORE_MOYEN")
-    private Double scoreMoyen;
+    private float scoreMoyen;
     @Column(name = "MOY_SUITES_GAGNEES")
-    private Double moySuitesGagnees;
+    private float moySuitesGagnees;
     @Column(name = "MOY_CV_PERDUES")
-    private Double moyCvPerdues;
+    private float moyCvPerdues;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "joueur")
     private List<JoueursPartie> joueursPartieList;
 
     public Joueur() {
     }
 
-    public Joueur(BigDecimal codeJoueur) {
+    public Joueur(int codeJoueur) {
         this.codeJoueur = codeJoueur;
     }
 
-    public BigDecimal getCodeJoueur() {
+    public int getCodeJoueur() {
         return codeJoueur;
     }
 
-    public void setCodeJoueur(BigDecimal codeJoueur) {
+    public void setCodeJoueur(int codeJoueur) {
         this.codeJoueur = codeJoueur;
     }
 
@@ -108,11 +106,11 @@ public class Joueur implements Serializable {
         this.mdp = mdp;
     }
 
-    public BigInteger getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(BigInteger age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -132,43 +130,43 @@ public class Joueur implements Serializable {
         this.ville = ville;
     }
 
-    public BigInteger getNbVictoires() {
+    public int getNbVictoires() {
         return nbVictoires;
     }
 
-    public void setNbVictoires(BigInteger nbVictoires) {
+    public void setNbVictoires(int nbVictoires) {
         this.nbVictoires = nbVictoires;
     }
 
-    public Double getNbMoyenVictoires() {
+    public float getNbMoyenVictoires() {
         return nbMoyenVictoires;
     }
 
-    public void setNbMoyenVictoires(Double nbMoyenVictoires) {
+    public void setNbMoyenVictoires(float nbMoyenVictoires) {
         this.nbMoyenVictoires = nbMoyenVictoires;
     }
 
-    public Double getScoreMoyen() {
+    public float getScoreMoyen() {
         return scoreMoyen;
     }
 
-    public void setScoreMoyen(Double scoreMoyen) {
+    public void setScoreMoyen(float scoreMoyen) {
         this.scoreMoyen = scoreMoyen;
     }
 
-    public Double getMoySuitesGagnees() {
+    public float getMoySuitesGagnees() {
         return moySuitesGagnees;
     }
 
-    public void setMoySuitesGagnees(Double moySuitesGagnees) {
+    public void setMoySuitesGagnees(float moySuitesGagnees) {
         this.moySuitesGagnees = moySuitesGagnees;
     }
 
-    public Double getMoyCvPerdues() {
+    public float getMoyCvPerdues() {
         return moyCvPerdues;
     }
 
-    public void setMoyCvPerdues(Double moyCvPerdues) {
+    public void setMoyCvPerdues(float moyCvPerdues) {
         this.moyCvPerdues = moyCvPerdues;
     }
 
@@ -184,7 +182,7 @@ public class Joueur implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codeJoueur != null ? codeJoueur.hashCode() : 0);
+        hash += codeJoueur;
         return hash;
     }
 
@@ -195,10 +193,7 @@ public class Joueur implements Serializable {
             return false;
         }
         Joueur other = (Joueur) object;
-        if ((this.codeJoueur == null && other.codeJoueur != null) || (this.codeJoueur != null && !this.codeJoueur.equals(other.codeJoueur))) {
-            return false;
-        }
-        return true;
+        return this.codeJoueur == other.codeJoueur;
     }
 
     @Override

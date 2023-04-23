@@ -36,11 +36,11 @@ public class JoueursPartie implements Serializable {
     @EmbeddedId
     protected JoueursPartiePK joueursPartiePK;
     @Column(name = "SCORE")
-    private BigInteger score;
+    private int score;
     @Column(name = "SUITE_GAGNEES")
-    private BigInteger suiteGagnees;
+    private int suiteGagnees;
     @Column(name = "CV_PERDUES")
-    private BigInteger cvPerdues;
+    private int cvPerdues;
     @JoinColumn(name = "CODE_JOUEUR", referencedColumnName = "CODE_JOUEUR", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Joueur joueur;
@@ -55,7 +55,7 @@ public class JoueursPartie implements Serializable {
         this.joueursPartiePK = joueursPartiePK;
     }
 
-    public JoueursPartie(BigInteger codeJoueur, BigInteger codePartie) {
+    public JoueursPartie(int codeJoueur, int codePartie) {
         this.joueursPartiePK = new JoueursPartiePK(codeJoueur, codePartie);
     }
 
@@ -67,27 +67,27 @@ public class JoueursPartie implements Serializable {
         this.joueursPartiePK = joueursPartiePK;
     }
 
-    public BigInteger getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(BigInteger score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
-    public BigInteger getSuiteGagnees() {
+    public int getSuiteGagnees() {
         return suiteGagnees;
     }
 
-    public void setSuiteGagnees(BigInteger suiteGagnees) {
+    public void setSuiteGagnees(int suiteGagnees) {
         this.suiteGagnees = suiteGagnees;
     }
 
-    public BigInteger getCvPerdues() {
+    public int getCvPerdues() {
         return cvPerdues;
     }
 
-    public void setCvPerdues(BigInteger cvPerdues) {
+    public void setCvPerdues(int cvPerdues) {
         this.cvPerdues = cvPerdues;
     }
 

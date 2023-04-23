@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface IJoueur {
     /**
-     * Ajoute un joueur à la base de données
+     * Ajoute un joueur à la base de données (création d'un compte Joueur)
      * @param joueur Le Joueur
      * @return L'id du joueur attribué par la BDD
      */
@@ -41,4 +41,11 @@ public interface IJoueur {
      * @return La liste des joueurs
      */
     public ArrayList<Joueur> rechercherTousLesJoueurs();
+    /**
+     * Permet à un joueur de se connecter
+     * @param pseudo Le pseudo du joueur
+     * @param motDePasse Le mot de passe du joueur
+     * @return Le joueur si pseudo et mot de passe correct, sinon null
+     */
+    public Joueur connexionJoueur(String pseudo, String motDePasse);
 }
