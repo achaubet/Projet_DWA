@@ -51,4 +51,9 @@ public interface IJoueur {
      * @return Le joueur si pseudo et mot de passe correct, sinon null
      */
     public Joueur connexionJoueur(String pseudo, String motDePasse);
+    /**
+     * Permet de mettre à jour les statistiques des joueurs à la fin d'une partie
+     * @throws CulDeChouetteDAO.DAOException en cas de problème
+     */
+    public void updateAllJoueursStats() throws DAOException;
 }

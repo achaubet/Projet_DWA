@@ -5,6 +5,7 @@
 package CulDeChouetteDAO;
 
 import POJO.Joueur;
+import POJO.JoueursPartie;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,8 +24,8 @@ public class JoueurDAO_JPA implements IJoueur {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            TypedQuery<Integer> queryAdresse = em.createQuery("SELECT MAX(j.codeJoueur) FROM Joueur j", Integer.class);
-            Integer maxCodeJoueur = queryAdresse.getSingleResult();
+            TypedQuery<Integer> queryJoueur = em.createQuery("SELECT MAX(j.codeJoueur) FROM Joueur j", Integer.class);
+            Integer maxCodeJoueur = queryJoueur.getSingleResult();
             if(maxCodeJoueur != null) {
                 joueur.setCodeJoueur(maxCodeJoueur);
             } else {
@@ -78,9 +79,7 @@ public class JoueurDAO_JPA implements IJoueur {
         try {
             em.getTransaction().begin();
             joueur = em.find(Joueur.class, idJoueur);
-            em.getTransaction().commit();
         } catch(Exception e) {
-            em.getTransaction().rollback();
             throw new DAOException("Erreur lors de la supression du joueur " + e.getMessage());
         } finally {
             em.close();
@@ -112,6 +111,37 @@ public class JoueurDAO_JPA implements IJoueur {
             return query.getSingleResult();
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public void updateAllJoueursStats() throws DAOException {
+        List<Joueur> joueurs = this.rechercherTousLesJoueurs();
+        for(Joueur joueur: joueurs) {
+            List<JoueursPartie> joueurParties = joueur.getJoueursPartieList();
+            int nbParties = joueurParties.size();
+            int nbVictoires = 0;
+            int scoreTotal = 0;
+            int nbSuitesGagnees = 0;
+            int nbCvPerdues = 0;
+            for(JoueursPartie joueurPartie: joueurParties) {
+                if(joueurPartie.getScore() >= 343) {
+                    nbVictoires++;
+                }
+                scoreTotal += joueurPartie.getScore();
+                nbSuitesGagnees += joueurPartie.getSuiteGagnees();
+                nbCvPerdues += joueurPartie.getCvPerdues();
+            }
+            float scoreMoyen = (float) scoreTotal / nbParties; 
+            float moySuitesGagnees = (float) nbSuitesGagnees / nbParties;
+            float moyCvPerdues = (float) nbCvPerdues / nbParties;
+            float nbMoyenVictoires = (float) nbVictoires / nbParties;
+            joueur.setMoyCvPerdues(moyCvPerdues);
+            joueur.setMoySuitesGagnees(moySuitesGagnees);
+            joueur.setScoreMoyen(scoreMoyen);
+            joueur.setNbVictoires(nbVictoires);
+            joueur.setNbMoyenVictoires(nbMoyenVictoires);
+            this.modifierJoueur(joueur);
         }
     }
     

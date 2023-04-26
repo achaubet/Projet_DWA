@@ -26,18 +26,19 @@ public interface IJoueursPartie {
     public void modifierJoueursPartie(JoueursPartie joueursPartie) throws DAOException;
     /**
      * Supprime le JoueursPartie de la base de données
-     * @param idJoueursPartie
+     * @param joueursPartie
      * @return Vrai si pas d'erreur, sinon Faux
      * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public boolean supprimerJoueurPartie(int idJoueursPartie) throws DAOException;
+    public boolean supprimerJoueurPartie(JoueursPartie joueursPartie) throws DAOException;
     /**
      * Recherche le JoueursPartie
-     * @param idJoueursPartie
+     * @param codeJoueur Le code du joueur
+     * @param codePartie Le code de la partie
      * @return Le JoueursPartie si trouvé, sinon null
      * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public JoueursPartie RechercherJoueursPartieParId(int idJoueursPartie) throws DAOException;
+    public JoueursPartie RechercherJoueursPartieParId(int codeJoueur, int codePartie) throws DAOException;
     /**
      * Recherche tous les JoueursPartie existants
      * @return La liste de tous les JoueursPartie

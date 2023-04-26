@@ -8,7 +8,7 @@ package com.mycompany.projetculdechouette;
  *
  * @author Arnaud
  */
-public class DAOClassTest {
+public class MainClass_Test {
      public static void main(String[] args){
          System.out.println("Classe de test pour les DAO");
          
