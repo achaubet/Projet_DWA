@@ -22,11 +22,13 @@ public class JoueurDAO_JPA implements IJoueur {
     @Override
     public void ajouterJoueur(Joueur joueur) throws DAOException {
         EntityManager em = emf.createEntityManager();
+        System.out.println("COUCOU");
         try {
             em.getTransaction().begin();
             TypedQuery<Integer> queryJoueur = em.createQuery("SELECT MAX(j.codeJoueur) FROM Joueur j", Integer.class);
             Integer maxCodeJoueur = queryJoueur.getSingleResult();
             if(maxCodeJoueur != null) {
+                maxCodeJoueur++;
                 joueur.setCodeJoueur(maxCodeJoueur);
             } else {
                 joueur.setCodeJoueur(1);
@@ -46,7 +48,7 @@ public class JoueurDAO_JPA implements IJoueur {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(joueur);
+            em.merge(joueur);
             em.getTransaction().commit();
         } catch(Exception e) {
             em.getTransaction().rollback();
@@ -61,7 +63,7 @@ public class JoueurDAO_JPA implements IJoueur {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.remove(joueur);
+            em.remove(em.merge(joueur));
             em.getTransaction().commit();
             return true;
         } catch(Exception e) {
@@ -110,8 +112,25 @@ public class JoueurDAO_JPA implements IJoueur {
         try {
             return query.getSingleResult();
         } catch (Exception e) {
+            em.close();
             return null;
         }
+    }
+    
+    @Override
+    public boolean rechercherPseudoExistant(String pseudo) {
+        EntityManager em = emf.createEntityManager();
+        Joueur joueur = null;
+        try {
+            joueur =  em.createQuery("SELECT j FROM Joueur j WHERE j.pseudo = :pseudo", Joueur.class)
+                    .setParameter("pseudo", pseudo)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return false;
+        } finally {
+            em.close();
+        }
+        return joueur!=null;
     }
 
     @Override
@@ -148,5 +167,5 @@ public class JoueurDAO_JPA implements IJoueur {
     public JoueurDAO_JPA() throws DAOException {
         this.emf = ConnexionBDD.getEMF();
     }
-    
+   
 }

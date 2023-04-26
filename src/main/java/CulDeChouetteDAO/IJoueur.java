@@ -56,4 +56,11 @@ public interface IJoueur {
      * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
     public void updateAllJoueursStats() throws DAOException;
+    /**
+     * Permet de chercher dans la base si un pseudo existe deja
+     * @param pseudo
+     * @return Vrai si existe, Faux sinon
+     * @throws DAOException 
+     */
+    public boolean rechercherPseudoExistant(String pseudo) throws DAOException;
 }

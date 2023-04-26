@@ -45,7 +45,7 @@ public class PartieDAO_JPA implements IPartie {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(partie);
+            em.merge(partie);
             em.getTransaction().commit();
         } catch(Exception e) {
             em.getTransaction().rollback();

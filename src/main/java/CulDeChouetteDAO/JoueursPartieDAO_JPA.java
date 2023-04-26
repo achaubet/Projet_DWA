@@ -38,7 +38,7 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(joueursPartie);
+            em.merge(joueursPartie);
             em.getTransaction().commit();
         } catch(Exception e) {
             em.getTransaction().rollback();
@@ -53,7 +53,7 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.remove(joueursPartie);
+            em.remove(em.merge(joueursPartie));
             em.getTransaction().commit();
         } catch(Exception e) {
             em.getTransaction().rollback();
