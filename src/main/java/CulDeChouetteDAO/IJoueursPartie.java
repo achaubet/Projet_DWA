@@ -44,5 +44,5 @@ public interface IJoueursPartie {
      * @return La liste de tous les JoueursPartie
      * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public List<JoueursPartie> rechercherTousLesJoueursParties() throws DAOException;    
+    public List<JoueursPartie> rechercherTousLesJoueursParties() throws DAOException;
 }

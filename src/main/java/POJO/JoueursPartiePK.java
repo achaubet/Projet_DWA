@@ -69,7 +69,7 @@ public class JoueursPartiePK implements Serializable {
         if (this.codeJoueur != other.codeJoueur) {
             return false;
         }
-        if (this.codePartie != other.codePartie) {
+        else if (this.codePartie != other.codePartie) {
             return false;
         }
         return true;

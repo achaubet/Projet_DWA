@@ -34,17 +34,13 @@ public class MainClass_Test {
              p1.setDatePartie(new Date());
              daoPartie.ajouterPartie(p1);
              // Creation d'un lien entre j1 et p1
-             JoueursPartie jp1 = new JoueursPartie();
-             JoueursPartiePK jpPK1 = new JoueursPartiePK();
-             jpPK1.setCodeJoueur(j1.getCodeJoueur());
-             jpPK1.setCodePartie(p1.getCodePartie());
-             jp1.setJoueursPartiePK(jpPK1);
+             JoueursPartie jp1 = new JoueursPartie(j1.getCodeJoueur(), p1.getCodePartie());
              jp1.setCvPerdues(1);
              jp1.setScore(343);
              jp1.setSuiteGagnees(3);
              daoJoueursPartie.ajouterJoueursPartie(jp1);
              
-             //daoJoueur.updateAllJoueursStats();
+             daoJoueur.updateAllJoueursStats();
              
              // Connexion d'un joueur
              Joueur j2 = daoJoueur.connexionJoueur("test", "azerty");

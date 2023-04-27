@@ -132,35 +132,50 @@ public class JoueurDAO_JPA implements IJoueur {
         }
         return joueur!=null;
     }
+    
+    private List<JoueursPartie> rechercherPartieParIdJoueur(int codeJoueur) throws DAOException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            TypedQuery<JoueursPartie> query = em.createQuery("SELECT jp FROM JoueursPartie jp WHERE jp.joueursPartiePK.codeJoueur = :codeJoueur", JoueursPartie.class);
+            query.setParameter("codeJoueur", codeJoueur);
+            return query.getResultList();
+        } catch (Exception e) {
+            em.close();
+            return null;
+        }
+    }
 
     @Override
     public void updateAllJoueursStats() throws DAOException {
         List<Joueur> joueurs = this.rechercherTousLesJoueurs();
         for(Joueur joueur: joueurs) {
-            List<JoueursPartie> joueurParties = joueur.getJoueursPartieList();
+            List<JoueursPartie> joueurParties = this.rechercherPartieParIdJoueur(joueur.getCodeJoueur());
             int nbParties = joueurParties.size();
-            int nbVictoires = 0;
-            int scoreTotal = 0;
-            int nbSuitesGagnees = 0;
-            int nbCvPerdues = 0;
-            for(JoueursPartie joueurPartie: joueurParties) {
-                if(joueurPartie.getScore() >= 343) {
-                    nbVictoires++;
+            if(nbParties > 0) {
+                int nbVictoires = 0;
+                int scoreTotal = 0;
+                int nbSuitesGagnees = 0;
+                int nbCvPerdues = 0;
+                for(JoueursPartie joueurPartie: joueurParties) {
+                    if(joueurPartie.getScore() >= 343) {
+                        nbVictoires++;
+                    }
+                    scoreTotal += joueurPartie.getScore();
+                    nbSuitesGagnees += joueurPartie.getSuiteGagnees();
+                    nbCvPerdues += joueurPartie.getCvPerdues();
                 }
-                scoreTotal += joueurPartie.getScore();
-                nbSuitesGagnees += joueurPartie.getSuiteGagnees();
-                nbCvPerdues += joueurPartie.getCvPerdues();
+                float scoreMoyen = (float) scoreTotal / nbParties ; 
+                float moySuitesGagnees = (float) nbSuitesGagnees / nbParties;
+                float moyCvPerdues = (float) nbCvPerdues / nbParties;
+                float nbMoyenVictoires = (float) nbVictoires / nbParties;
+                joueur.setMoyCvPerdues(moyCvPerdues);
+                joueur.setMoySuitesGagnees(moySuitesGagnees);
+                joueur.setScoreMoyen(scoreMoyen);
+                joueur.setNbVictoires(nbVictoires);
+                joueur.setNbMoyenVictoires(nbMoyenVictoires);
+                this.modifierJoueur(joueur);
             }
-            float scoreMoyen = (float) scoreTotal / nbParties; 
-            float moySuitesGagnees = (float) nbSuitesGagnees / nbParties;
-            float moyCvPerdues = (float) nbCvPerdues / nbParties;
-            float nbMoyenVictoires = (float) nbVictoires / nbParties;
-            joueur.setMoyCvPerdues(moyCvPerdues);
-            joueur.setMoySuitesGagnees(moySuitesGagnees);
-            joueur.setScoreMoyen(scoreMoyen);
-            joueur.setNbVictoires(nbVictoires);
-            joueur.setNbMoyenVictoires(nbMoyenVictoires);
-            this.modifierJoueur(joueur);
         }
     }
     

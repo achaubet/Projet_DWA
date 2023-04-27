@@ -83,7 +83,7 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            TypedQuery<JoueursPartie> query = em.createQuery("SELECT p FROM Partie p", JoueursPartie.class);
+            TypedQuery<JoueursPartie> query = em.createQuery("SELECT jp FROM JoueursPartie jp", JoueursPartie.class);
             return query.getResultList();
         } catch(Exception e) {
             throw new DAOException("Erreur lors de la récupération de la liste des Joueurs Partie");
@@ -95,5 +95,4 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
     public JoueursPartieDAO_JPA() throws DAOException {
         this.emf = ConnexionBDD.getEMF();
     }
-    
 }
