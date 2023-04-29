@@ -8,4 +8,8 @@
             30
         </session-timeout>
     </session-config>
+    <servlet>
+        <servlet-name>Page d'accueil</servlet-name>
+        <servlet-class>PageAccueil</servlet-class>
+    </servlet>
 </web-app>

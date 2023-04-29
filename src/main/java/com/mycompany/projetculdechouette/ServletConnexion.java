@@ -11,11 +11,11 @@ import CulDeChouetteDAO.IJoueur;
 import CulDeChouetteDAO.PersistenceKind;
 import POJO.Joueur;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +52,10 @@ public class ServletConnexion extends HttpServlet {
             response.sendError(0, "Mot de passe ou nom d'utilisateur incorrect");
         } else {
             System.out.println("Connexion OK!");
+            Cookie cookie = new Cookie("user", j.getPseudo());
+            Cookie cookieId = new Cookie("id", Integer.toString(j.getCodeJoueur()));
+            response.addCookie(cookie);
+            response.addCookie(cookieId);
             response.sendRedirect("PageAccueil.jsp");
         } 
     }
