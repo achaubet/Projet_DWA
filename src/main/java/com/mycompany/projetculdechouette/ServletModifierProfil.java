@@ -4,8 +4,16 @@
  */
 package com.mycompany.projetculdechouette;
 
+import CulDeChouetteDAO.AbstractDAOFactory;
+import CulDeChouetteDAO.CulDeChouetteDAOFactory;
+import CulDeChouetteDAO.DAOException;
+import CulDeChouetteDAO.IJoueur;
+import CulDeChouetteDAO.PersistenceKind;
+import POJO.Joueur;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +27,19 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ServletModifierProfil", urlPatterns = {"/ServletModifierProfil"})
 public class ServletModifierProfil extends HttpServlet {
 
-
+    IJoueur daoJoueur = null;
+    
+    @Override
+    public void init() throws ServletException {
+        try {
+            super.init();
+            // Créer une instance de Personne et l'initialiser avec les données nécessaires
+            CulDeChouetteDAOFactory factory = AbstractDAOFactory.getDAOFactory(PersistenceKind.JPA);
+            daoJoueur = factory.getDAOJoueur();
+        } catch (DAOException ex) {
+            Logger.getLogger(ServletConnexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -48,9 +68,26 @@ public class ServletModifierProfil extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(request);
-        System.out.println("POST");
-        System.out.println(request.getParameter("pseudo"));
+        try {
+            System.out.println(request);
+            System.out.println("POST");
+            System.out.println(request.getParameter("pseudo"));
+            String pseudo = request.getParameter("pseudo");
+            String mdp = request.getParameter("mdp");
+            String age = request.getParameter("age");
+            String genre = request.getParameter("sexe");
+            String ville = request.getParameter("ville");
+            Joueur j = daoJoueur.rechercherJoueurParPseudo(pseudo);
+            j.setAge(Integer.parseInt(age));
+            j.setMdp(mdp);
+            j.setVille(ville);
+            j.setSexe(genre.toCharArray()[0]);
+            daoJoueur.modifierJoueur(j);
+        } catch (DAOException ex) {
+            Logger.getLogger(ServletModifierProfil.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            response.sendRedirect("PageAccueil.jsp");
+        }
         
     }
 

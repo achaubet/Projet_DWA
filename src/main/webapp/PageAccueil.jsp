@@ -15,7 +15,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex flex-col justify-center h-screen">
-        <h1 class="text-4xl font-bold text-center mb-8">Cul de Chouette</h1>
+        <h1 class="text-4xl font-bold text-center mt-0 mb-10">Cul de Chouette</h1>
         <%-- Check if user is logged in --%>
         <% String username = null;
            Cookie[] cookies = request.getCookies();
@@ -30,9 +30,7 @@
         %>
         <%-- If user is logged in, display their username --%>
         <% if (username != null) { %>
-            <div>
-                Username: <%= username %>
-            </div>
+            <h1 class="text-2xl font-bold text-center mt-10">Connecté en tant que: <%= username %></h1>
         <% } %>
         <%-- Display links based on whether user is logged in or not --%>
         <div class="flex justify-center my-2">

@@ -38,7 +38,14 @@ public interface IJoueursPartie {
      * @return Le JoueursPartie si trouvé, sinon null
      * @throws CulDeChouetteDAO.DAOException en cas de problème
      */
-    public JoueursPartie RechercherJoueursPartieParId(int codeJoueur, int codePartie) throws DAOException;
+    public JoueursPartie rechercherJoueursPartieParId(int codeJoueur, int codePartie) throws DAOException;
+    /**
+     * Rechercher toutes les JoueursPartie avec le code de la partie
+     * @param codePartie Le code de la partie
+     * @return la liste contenant tous les JoueursPartie par Partie
+     * @throws DAOException en cas de problème
+     */
+    public List<JoueursPartie> rechercherJoueursPartieParCodePartie(int codePartie) throws DAOException;
     /**
      * Recherche tous les JoueursPartie existants
      * @return La liste de tous les JoueursPartie

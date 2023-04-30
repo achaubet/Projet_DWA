@@ -22,7 +22,7 @@ public class MainClass_Test {
              IJoueursPartie daoJoueursPartie = factory.getDAOJoueursPartie();
              // Creation et modification d'un joueur
              Joueur j1 = new Joueur();
-             j1.setPseudo("test");
+             j1.setPseudo("test2");
              j1.setMdp("azerty");
              j1.setAge(18);
              daoJoueur.ajouterJoueur(j1);
@@ -39,19 +39,27 @@ public class MainClass_Test {
              jp1.setScore(343);
              jp1.setSuiteGagnees(3);
              daoJoueursPartie.ajouterJoueursPartie(jp1);
+             // Ajout deuxieme joueur par connexion
+             Joueur j2 = daoJoueur.connexionJoueur("test", "test");
+             JoueursPartie jp2 = new JoueursPartie(j2.getCodeJoueur(), p1.getCodePartie());
+             jp2.setCvPerdues(4);
+             jp2.setScore(100);
+             jp2.setSuiteGagnees(1);
+             daoJoueursPartie.ajouterJoueursPartie(jp2);
              
              daoJoueur.updateAllJoueursStats();
              
              // Connexion d'un joueur
-             Joueur j2 = daoJoueur.connexionJoueur("test", "azerty");
-             System.out.println("Joueur connecté: " + j2.toString());
+             
+             //System.out.println("Joueur connecté: " + j2.toString());
              System.out.println("Test joueur existant: " + daoJoueur.rechercherPseudoExistant("test")); // Doit retourner true
-             System.out.println("Test joueur existant: " + daoJoueur.rechercherPseudoExistant("test2")); // Doit retourner false
+             System.out.println("Test joueur existant: " + daoJoueur.rechercherPseudoExistant("test12")); // Doit retourner false
              
              // Suppression d'un joueur
-             daoJoueursPartie.supprimerJoueurPartie(jp1);
-             daoJoueur.supprimerJoueur(j1);
-             daoPartie.supprimerPartie(p1.getCodePartie());
+             // daoJoueursPartie.supprimerJoueurPartie(jp2);
+             // daoJoueursPartie.supprimerJoueurPartie(jp1);
+             // daoJoueur.supprimerJoueur(j1);
+             // daoPartie.supprimerPartie(p1.getCodePartie());
              
          } catch (DAOException ex) {
              ex.printStackTrace();

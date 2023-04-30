@@ -65,17 +65,34 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
     }
 
     @Override
-    public JoueursPartie RechercherJoueursPartieParId(int codeJoueur, int codePartie) throws DAOException {
+    public JoueursPartie rechercherJoueursPartieParId(int codeJoueur, int codePartie) throws DAOException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             TypedQuery<JoueursPartie> query = em.createQuery("SELECT jp FROM JoueursPartie jp WHERE jp.joueursPartiePK.codeJoueur = :codeJoueur AND jp.joueursPartiePK.codePartie = :codePartie", JoueursPartie.class);
+            query.setParameter("codeJoueur", codeJoueur);
+            query.setParameter("codePartie", codePartie);
             return query.getSingleResult();
         } catch(Exception e) {
             throw new DAOException("Erreur lors de la récupération de la liste des Joueurs Partie");
         } finally {
             em.close();
         }  
+    }
+    
+    @Override
+    public List<JoueursPartie> rechercherJoueursPartieParCodePartie(int codePartie) throws DAOException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            TypedQuery<JoueursPartie> query = em.createQuery("SELECT jp FROM JoueursPartie jp WHERE jp.joueursPartiePK.codePartie = :codePartie", JoueursPartie.class);
+            query.setParameter("codePartie", codePartie);
+            return query.getResultList();
+        } catch(Exception e) {
+            throw new DAOException("Erreur lors de la récupération de la liste des Joueurs Partie");
+        } finally {
+            em.close();
+        }      
     }
 
     @Override
@@ -95,4 +112,5 @@ public class JoueursPartieDAO_JPA implements IJoueursPartie {
     public JoueursPartieDAO_JPA() throws DAOException {
         this.emf = ConnexionBDD.getEMF();
     }
+
 }

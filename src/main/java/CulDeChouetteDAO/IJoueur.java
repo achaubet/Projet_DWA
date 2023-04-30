@@ -39,6 +39,13 @@ public interface IJoueur {
      */
     public Joueur rechercherJoueurParId(int idJoueur) throws DAOException;
     /**
+     * Recherche un joueur avec le pseudo
+     * @param pseudo
+     * @return Joueur si trouvé, null sinon
+     * @throws DAOException en cas de problème
+     */
+    public Joueur rechercherJoueurParPseudo(String pseudo) throws DAOException;
+    /**
      * Recherche tous les joueurs existants dans la base de données
      * @return La liste des joueurs
      * @throws CulDeChouetteDAO.DAOException en cas de problème

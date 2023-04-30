@@ -88,6 +88,23 @@ public class JoueurDAO_JPA implements IJoueur {
         }
         return joueur;
     }
+    
+    @Override
+    public Joueur rechercherJoueurParPseudo(String pseudo) throws DAOException {
+            EntityManager em = emf.createEntityManager();
+        Joueur joueur = null;
+        try {
+            joueur =  em.createQuery("SELECT j FROM Joueur j WHERE j.pseudo = :pseudo", Joueur.class)
+                    .setParameter("pseudo", pseudo)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new DAOException("Erreur lors de de la récupération du joueur: +" + pseudo + ", raison: " + e.getMessage());
+        } finally {
+            em.close();
+        }
+        return joueur;
+    }
+    
 
     @Override
     public List<Joueur> rechercherTousLesJoueurs() throws DAOException {
@@ -151,6 +168,7 @@ public class JoueurDAO_JPA implements IJoueur {
         List<Joueur> joueurs = this.rechercherTousLesJoueurs();
         for(Joueur joueur: joueurs) {
             List<JoueursPartie> joueurParties = this.rechercherPartieParIdJoueur(joueur.getCodeJoueur());
+            joueur.setJoueursPartieList(joueurParties);
             int nbParties = joueurParties.size();
             if(nbParties > 0) {
                 int nbVictoires = 0;
