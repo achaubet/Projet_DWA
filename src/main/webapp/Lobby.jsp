@@ -33,20 +33,34 @@
     </div>
     </body>
     <script>
-        console.log("COUCOU!");
         const socket = new WebSocket("ws://localhost:8080/ProjetCulDeChouette/LobbyWS");
         
         const user = {
             username: '<%=username %>',
             userID: <%=userID %>
         };
-
+        
+        // @OnOpen
         socket.addEventListener("open", (event) => {
           socket.send(JSON.stringify(user));
         });
         
-        socket.addEventListener("message", (event) => {
-          console.log("Message from server: ", event.data);
+        // @OnMessage
+        socket.addEventListener("message", (event) => {;
+            const message = JSON.parse(event.data);
+            console.log(message);
+            if (message.type === "userList") {
+                const userList = document.getElementById("user-list");
+                userList.innerHTML = "";
+                message.users.forEach((user) => {
+                    const li = document.createElement("li");
+                    li.textContent = user;
+                    userList.appendChild(li);
+                });
+            }
+            if(message.type === "message") {
+                //console.log(message.);
+            }
         });
     </script>
 </html>
