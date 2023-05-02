@@ -50,22 +50,6 @@ public class LobbyWS {
         session.getBasicRemote().sendText(messageString);
     }
     
-    /*     @OnOpen
-    public void onOpen(Session session, EndpointConfig EndpointConfig) throws IOException, Exception {
-        System.out.println ("WebSocket ouverte : "+session.getId());
-        // properties = config.getUserProperties();
-        // sessions.add(session);
-
-        JsonObject openMessage = javax.json.Json.createObjectBuilder()
-                .add("message", "Connecté avec succès à Java")
-                .build();
-        StringWriter stringWriter = new StringWriter();
-        try (JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
-            jsonWriter.writeObject(openMessage);
-        }
-        session.getBasicRemote().sendText(stringWriter.toString());
-    } */
-    
     @OnMessage
     public void onMessage(String message, Session session) throws IOException, EncodeException {
         System.out.println("Message recu: " + message);
@@ -76,6 +60,15 @@ public class LobbyWS {
             System.out.println(username);
             sessionsHM.put(username, session);
             updateUserList();
+        }
+        if(jsonObject.containsKey("message")) {
+            switch(jsonObject.getString("message")) {
+                case "requestUpdateUserList":
+                    System.out.println("User list update send");
+                    updateUserList();
+                    break;
+               
+            }
         }
         jsonReader.close(); // Ne pas oublier de fermer le reader une fois le JSON parsé
     }

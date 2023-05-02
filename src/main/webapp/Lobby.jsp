@@ -27,6 +27,7 @@
     <meta charset="UTF-8">
     <title>Lobby</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
     <body class="bg-gray-100">
     <div class="flex flex-col justify-center h-screen">
@@ -36,34 +37,11 @@
     </div>
     </body>
     <script>
-        const socket = new WebSocket("ws://localhost:8080/ProjetCulDeChouette/LobbyWS");
-        
         const user = {
             username: '<%=username %>',
             userID: <%=userID %>
         };
-        
-        // @OnOpen
-        socket.addEventListener("open", (event) => {
-          socket.send(JSON.stringify(user));
-        });
-        
-        // @OnMessage
-        socket.addEventListener("message", (event) => {;
-            const message = JSON.parse(event.data);
-            console.log(message);
-            if (message.type === "userList") {
-                const userList = document.getElementById("user-list");
-                userList.innerHTML = "";
-                message.users.forEach((user) => {
-                    const li = document.createElement("li");
-                    li.textContent = user;
-                    userList.appendChild(li);
-                });
-            }
-            if(message.type === "message") {
-                //console.log(message.);
-            }
-        });
     </script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyWS.js"></script>
+    <!-- comment <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyAJAX.js"></script>  -->
 </html>
