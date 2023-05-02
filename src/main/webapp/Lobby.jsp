@@ -18,6 +18,9 @@
                  }
               }
            }
+           if (username == null) {
+              response.sendRedirect("PageAccueil.jsp");
+            }
         %>
 <html>
 <head>
