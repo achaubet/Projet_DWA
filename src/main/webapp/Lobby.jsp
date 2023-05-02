@@ -43,5 +43,4 @@
         };
     </script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyWS.js"></script>
-    <!-- comment <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyAJAX.js"></script>  -->
 </html>

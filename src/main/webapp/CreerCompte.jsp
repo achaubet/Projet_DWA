@@ -14,6 +14,7 @@
                 <div class="mb-4">
                     <label for="pseudo" class="block text-gray-700 font-bold mb-2">Pseudo</label>
                     <input type="text" name="pseudo" id="pseudo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label id="pseudo-error" class="block text-gray-700 font-bold mb-2" hidden></label>
                 </div>
                 <div class="mb-4">
                     <label for="mdp" class="block text-gray-700 font-bold mb-2">Mot de passe</label>
@@ -44,4 +45,31 @@
         </form>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#pseudo").on('blur', function() {
+            let pseudo = $(this).val();
+            $.ajax({
+                url: 'ServletVerifierPseudo',
+                type: 'POST',
+                data: {pseudo: pseudo},
+                success: function(reponse) {
+                    //console.log(JSON.parse(reponse));
+                    console.log(reponse);
+                    if(reponse.exist === true){
+                        $('#pseudo').addClass('border-red-500');
+                        $('#pseudo-error').text('Pseudo déjà existant, veuillez en choisir un autre.').show();
+                        $('button[type="submit"]').attr('disabled', true);
+                    } else {
+                        $('#pseudo').removeClass('border-red-500');
+                        $('#pseudo-error').hide();
+                        $('button[type="submit"]').attr('disabled', false);
+                    }
+                }.bind(this)
+            });
+        });
+    });
+</script>
+    
 </html>
