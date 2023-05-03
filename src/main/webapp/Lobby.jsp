@@ -41,6 +41,9 @@
             <h2>Ordre de la liste de passage des joueurs :</h2>
             <ul id="user-list" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
         </div>
+        <div class="flex justify-center">
+            <button id="send-invitations-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Send Invitations</button>
+        </div>
         <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Start Party</button>
     </div>
     </body>

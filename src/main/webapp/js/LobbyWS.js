@@ -17,14 +17,27 @@ socket.addEventListener("message", (event) => {
         const userList = document.getElementById("user-list");
         userList.innerHTML = "";
     }
-    if (message.type === "userList") {
+    /*if(message.type === "userListConfirmed") {
         const userList = $('#user-list');
         userList.empty();
         message.users.forEach((user) => {
-        const li = $("<li>").text(user).addClass("draggable");
+            const li = $("<li>").text(user).addClass("draggable");
             userList.append(li);
         });
         userList.sortable();
+        userList.disableSelection();
+    }*/
+    if(message.type === "userList") {
+        const userList = $('#user-list');
+        userList.empty();
+        message.users.forEach((user) => {
+            const li = $('<li>');
+            const checkbox = $('<input>').attr('type', 'checkbox').attr('id', user).addClass('mr-2 player-checkbox');
+            const label = $('<label>').attr('for', user).text(user);
+            li.append(checkbox, label);
+            userList.append(li);
+        });
+        // userList.sortable();
         userList.disableSelection();
     }
     if(message.type === "message") {
@@ -39,8 +52,32 @@ socket.addEventListener("message", (event) => {
     }
 });
 
+
+const inviteButton = document.getElementById("send-invitations-btn");
+inviteButton.addEventListener("click",(event) => {
+    console.log("COUCOU");
+    let playerSelected = [];
+    const allCheckboxes = document.querySelectorAll(".player-checkbox");
+    allCheckboxes.forEach((checkbox) => {
+        if(checkbox.checked) {
+            //console.log(checkbox);
+            playerSelected.push(checkbox.id);
+        }
+    });
+    console.log(playerSelected);
+    if(playerSelected.length < 2){
+        swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Veuillez selectionner au moins 2 joueurs',
+        });
+    } else {
+        socket.send(JSON.stringify({message: "inviteSelectedUsers", users: playerSelected}));
+    }
+  });
+
 function updateUserList(){
     socket.send(JSON.stringify({message: "requestUpdateUserList"}));
 }
 
-setInterval(updateUserList, 5000);
+setInterval(updateUserList, 20000); // Set time to 20s otherwise the leader doesn't have the time to select the players 

@@ -67,6 +67,10 @@ public class LobbyWS {
                     System.out.println("User list update send");
                     updateUserList();
                     break;
+                case "inviteSelectedUsers":
+                    System.out.println("Received user list");
+                    
+                    break;
                 case "redirectToGame":
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
                     jsonObjectBuilder.add("type", "redirectToGame");
