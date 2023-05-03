@@ -25,6 +25,9 @@
                 </button>
             </div>
         </form>
+        <div class="flex justify-center mt-8">
+            <a href="PageAccueil.jsp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Retour à la page d'accueil</a>
+        </div>
     </div>
 </body>
 </html>
