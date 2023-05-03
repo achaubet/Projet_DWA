@@ -38,13 +38,17 @@
     <div class="flex flex-col justify-center h-screen">
         <h1 class="text-4xl font-bold text-center mt-0 mb-10">Lobby</h1>
         <div class="list-container">
-            <h2>Ordre de la liste de passage des joueurs :</h2>
+            <h2>Choix des joueurs :</h2>
             <ul id="user-list" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
+        </div>
+        <div class="list-container" hidden>
+            <h2>Ordre de la liste de passage des joueurs :</h2>
+            <ul id="user-list-confirmed" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
         </div>
         <div class="flex justify-center">
             <button id="send-invitations-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Send Invitations</button>
         </div>
-        <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Start Party</button>
+        <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline" hidden>Start Party</button>
     </div>
     </body>
     <script>

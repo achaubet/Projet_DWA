@@ -17,16 +17,6 @@ socket.addEventListener("message", (event) => {
         const userList = document.getElementById("user-list");
         userList.innerHTML = "";
     }
-    /*if(message.type === "userListConfirmed") {
-        const userList = $('#user-list');
-        userList.empty();
-        message.users.forEach((user) => {
-            const li = $("<li>").text(user).addClass("draggable");
-            userList.append(li);
-        });
-        userList.sortable();
-        userList.disableSelection();
-    }*/
     if(message.type === "userList") {
         const userList = $('#user-list');
         userList.empty();
@@ -39,6 +29,27 @@ socket.addEventListener("message", (event) => {
         });
         // userList.sortable();
         userList.disableSelection();
+    }
+    if(message.type === "userListConfirmed") {
+        const userList = $('#user-list-confirmed');
+        userList.empty();
+        message.users.forEach((user) => {
+            const li = $("<li>").text(user).addClass("draggable");
+            userList.append(li);
+        });
+        userList.sortable();
+        userList.disableSelection();
+    }
+    if(message.type === "invitation") {
+        console.log("Inivité!");
+        swal.fire({
+            title: 'Vous avez été invité !',
+            icon: 'question',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Accepter',
+            denyButtonText: `Refuser`
+        });
     }
     if(message.type === "message") {
         console.log("message");
@@ -69,10 +80,21 @@ inviteButton.addEventListener("click",(event) => {
         swal.fire({
             icon: 'error',
             title: 'Erreur',
-            text: 'Veuillez selectionner au moins 2 joueurs',
+            text: 'Veuillez selectionner au moins 2 joueurs'
         });
     } else {
-        socket.send(JSON.stringify({message: "inviteSelectedUsers", users: playerSelected}));
+        socket.send(JSON.stringify({message: "inviteSelectedUsers", leader: user.username, users: playerSelected}));
+        swal.fire({
+            title: 'Attente',
+            html: 'Attente de la réponse des joueurs',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                swal.showLoading();
+            },
+        }).then(() => {
+            // débloquer la liste d'ordre des joueurs et débloquer bouton "Demarrer partie"
+        });
     }
   });
 

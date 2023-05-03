@@ -13,10 +13,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.json.Json;
 import static javax.json.Json.createReader;
+import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
@@ -69,7 +72,18 @@ public class LobbyWS {
                     break;
                 case "inviteSelectedUsers":
                     System.out.println("Received user list");
-                    
+                    JsonArray selectedPlayersJson = jsonObject.getJsonArray("users");
+                    for(JsonValue player : selectedPlayersJson) {
+                        System.out.println(((JsonString) player).getString());
+                        if(sessionsHM.containsKey(((JsonString) player).getString())) {
+                            System.out.println("Coucou2");
+                            JsonObject invitationMessage = javax.json.Json.createObjectBuilder()
+                                .add("type", "invitation")
+                                .build();
+                            String invitationString = invitationMessage.toString();
+                            sessionsHM.get(((JsonString) player).getString()).getBasicRemote().sendText(invitationString);
+                        }
+                    }
                     break;
                 case "redirectToGame":
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
