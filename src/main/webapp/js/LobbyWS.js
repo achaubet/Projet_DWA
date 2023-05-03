@@ -2,8 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
-const socket = new WebSocket("ws://localhost:8080/ProjetCulDeChouette/LobbyWS");
-               
+const socket = new WebSocket("ws://localhost:8080/ProjetCulDeChouette/LobbyWS");             
 // @OnOpen
 socket.addEventListener("open", (event) => {
     socket.send(JSON.stringify(user));
@@ -31,17 +30,22 @@ socket.addEventListener("message", (event) => {
         userList.disableSelection();
     }
     if(message.type === "userListConfirmed") {
+        document.getElementById("user-list-confirmed-global").hidden = false;
+        document.getElementById("start-party-btn").hidden = false;
+        const sendInvitationsBtn = document.getElementById("send-invitations-btn");
+        sendInvitationsBtn.setAttribute("hidden", "");
         const userList = $('#user-list-confirmed');
         userList.empty();
-        message.users.forEach((user) => {
+        message.players.forEach((user) => {
             const li = $("<li>").text(user).addClass("draggable");
             userList.append(li);
         });
         userList.sortable();
         userList.disableSelection();
+        // swal.close();
     }
     if(message.type === "invitation") {
-        console.log("Inivité!");
+        console.log("Invitation reçue !");
         swal.fire({
             title: 'Vous avez été invité !',
             icon: 'question',
@@ -49,6 +53,24 @@ socket.addEventListener("message", (event) => {
             showCancelButton: true,
             confirmButtonText: 'Accepter',
             denyButtonText: `Refuser`
+        }).then((reponseInvit) => {
+            console.log(reponseInvit.value);
+            switch(reponseInvit.value){
+                case true:
+                    socket.send(JSON.stringify({
+                        message: "responseInvitation", 
+                        user: user.username, 
+                        reponse: "yes"
+                    }));
+                    break;
+                case false:
+                    socket.send(JSON.stringify({
+                        message: "responseInvitation", 
+                        user: user.username, 
+                        reponse: "no"
+                    }));
+                    break;
+            }
         });
     }
     if(message.type === "message") {
@@ -71,20 +93,27 @@ inviteButton.addEventListener("click",(event) => {
     const allCheckboxes = document.querySelectorAll(".player-checkbox");
     allCheckboxes.forEach((checkbox) => {
         if(checkbox.checked) {
-            //console.log(checkbox);
+            console.log(checkbox);
             playerSelected.push(checkbox.id);
         }
     });
     console.log(playerSelected);
-    if(playerSelected.length < 2){
+    // On supprime le nom du leader qui aura une autre place dans le JSON
+    playerSelected = playerSelected.filter((player) => player !== user.username);
+    console.log(playerSelected);
+    if(playerSelected.length < 1){
         swal.fire({
             icon: 'error',
             title: 'Erreur',
-            text: 'Veuillez selectionner au moins 2 joueurs'
+            text: 'Veuillez selectionner au moins 1 autre joueur'
         });
     } else {
-        socket.send(JSON.stringify({message: "inviteSelectedUsers", leader: user.username, users: playerSelected}));
-        swal.fire({
+        socket.send(JSON.stringify({
+            message: "inviteSelectedUsers",
+            leader: user.username, 
+            users: playerSelected
+        }));
+        /*swal.fire({
             title: 'Attente',
             html: 'Attente de la réponse des joueurs',
             allowOutsideClick: false,
@@ -94,7 +123,7 @@ inviteButton.addEventListener("click",(event) => {
             },
         }).then(() => {
             // débloquer la liste d'ordre des joueurs et débloquer bouton "Demarrer partie"
-        });
+        });*/
     }
   });
 

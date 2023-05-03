@@ -41,7 +41,7 @@
             <h2>Choix des joueurs :</h2>
             <ul id="user-list" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
         </div>
-        <div class="list-container" hidden>
+        <div class="list-container"  id="user-list-confirmed-global" hidden>
             <h2>Ordre de la liste de passage des joueurs :</h2>
             <ul id="user-list-confirmed" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
         </div>

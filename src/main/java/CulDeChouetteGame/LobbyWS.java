@@ -38,7 +38,8 @@ import javax.websocket.server.ServerEndpoint;
 public class LobbyWS {
     
     // private static List<Session> sessions = new ArrayList<>();
-    private static ConcurrentHashMap<String, Session> sessionsHM = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Session> sessionsHM = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, String> playerResponses = new ConcurrentHashMap<>(); // <Player, Response(yes,no,leader)>
     
     @OnOpen
     public void onOpen(Session session, EndpointConfig EndpointConfig) throws IOException, Exception {
@@ -73,6 +74,7 @@ public class LobbyWS {
                 case "inviteSelectedUsers":
                     System.out.println("Received user list");
                     JsonArray selectedPlayersJson = jsonObject.getJsonArray("users");
+                    playerResponses.put(jsonObject.getString("leader"),"leader");
                     for(JsonValue player : selectedPlayersJson) {
                         System.out.println(((JsonString) player).getString());
                         if(sessionsHM.containsKey(((JsonString) player).getString())) {
@@ -84,6 +86,14 @@ public class LobbyWS {
                             sessionsHM.get(((JsonString) player).getString()).getBasicRemote().sendText(invitationString);
                         }
                     }
+                    break;
+                case "responseInvitation":
+                    System.out.println("Repondu!");
+                    String reponse = jsonObject.getString("reponse");
+                    String user = jsonObject.getString("user");
+                    System.out.println(user + " à repondu: " +reponse);
+                    playerResponses.put(user, reponse);
+                    updateUserRespList();
                     break;
                 case "redirectToGame":
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -134,4 +144,26 @@ public class LobbyWS {
             entry.getValue().getBasicRemote().sendText(userListStr);
         }
     }
+    
+    private void updateUserRespList() throws IOException, EncodeException {
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        jsonObjectBuilder.add("type", "userListConfirmed");
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        for(Map.Entry<String, String> entry : playerResponses.entrySet()) {
+            if(entry.getValue().equals("yes")) {
+                jsonArrayBuilder.add(entry.getKey());
+            }
+        }
+        //jsonObjectBuilder.add("leader", )
+        jsonObjectBuilder.add("players", jsonArrayBuilder.build());
+        JsonObject jsonObject = jsonObjectBuilder.build();
+        String playerResponsesStr = jsonObject.toString();
+        for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
+            if((playerResponses.containsKey(entry.getKey())) && (playerResponses.get(entry.getKey()).equals("yes"))) {
+                entry.getValue().getBasicRemote().sendText(playerResponsesStr);
+            }
+        }
+        System.out.println("Accepted list updated");
+    }
+    
 }
