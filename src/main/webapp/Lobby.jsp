@@ -39,8 +39,17 @@
     <script>
         const user = {
             username: '<%=username %>',
-            userID: <%=userID %>
+            userID: '<%=userID %>'
         };
+        // Récupérer la référence du bouton "Start Party"
+        const startPartyBtn = document.getElementById("start-party-btn");
+
+        // Ajouter un événement d'écouteur de clic au bouton
+        startPartyBtn.addEventListener("click", (event) => {
+            // Envoyer un message WebSocket à tous les utilisateurs connectés pour qu'ils redirigent leur page vers "Game.jsp"
+            socket.send(JSON.stringify({ message: "redirectToGame" }));
+        });
+
     </script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyWS.js"></script>
 </html>

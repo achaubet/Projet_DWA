@@ -23,7 +23,11 @@ socket.addEventListener("message", (event) => {
             });
         }
         if(message.type === "message") {
-           //console.log(message.);
+            console.log("message");
+        }
+        if(message.type === "redirectToGame") {
+            console.log("CA REDIRECT TO GAME.JSP");
+            window.location.href = "Game.jsp";
         }
 });
 
