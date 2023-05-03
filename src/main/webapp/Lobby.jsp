@@ -32,12 +32,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js "></script>
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css " rel="stylesheet">
-    
+    <link href=" ${pageContext.request.contextPath}/css/lobby.css" type="text/css" rel="stylesheet">
 </head>
     <body class="bg-gray-100">
     <div class="flex flex-col justify-center h-screen">
         <h1 class="text-4xl font-bold text-center mt-0 mb-10">Lobby</h1>
-        <ul id="user-list"></ul>
+        <div class="list-container">
+            <h2>Ordre de la liste de passage des joueurs :</h2>
+            <ul id="user-list" class="bg-white rounded-lg shadow-md p-4 mb-4"></ul>
+        </div>
         <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Start Party</button>
     </div>
     </body>

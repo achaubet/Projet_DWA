@@ -1,0 +1,21 @@
+.draggable {
+    cursor: move;
+}
+
+.draggable:hover {
+    background-color: #f2f2f2;
+}
+.list-container {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid gray;
+    padding: 10px;
+}
+
+.list-container h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
