@@ -16,22 +16,27 @@ socket.addEventListener("message", (event) => {
     if (message.type === "userList") {
         const userList = document.getElementById("user-list");
         userList.innerHTML = "";
+    }
+    if (message.type === "userList") {
+        const userList = $('#user-list');
+        userList.empty();
         message.users.forEach((user) => {
-            const li = document.createElement("li");
-                li.textContent = user;
-                userList.appendChild(li);
-            });
+        const li = $("<li>").text(user).addClass("draggable");
+            userList.append(li);
+        });
+        userList.sortable();
+        userList.disableSelection();
+    }
+    if(message.type === "message") {
+        console.log("message");
+    }
+    if(message.type === "redirectToGame") {
+        const confirmed = confirm("Voulez-vous rejoindre la partie ?");
+        if (confirmed) {
+            console.log("CA REDIRECT TO GAME.JSP");
+            window.location.href = "Game.jsp";
         }
-        if(message.type === "message") {
-            console.log("message");
-        }
-        if(message.type === "redirectToGame") {
-            const confirmed = confirm("Voulez-vous rejoindre la partie ?");
-            if (confirmed) {
-                console.log("CA REDIRECT TO GAME.JSP");
-                window.location.href = "Game.jsp";
-            }
-        }
+    }
 });
 
 function updateUserList(){
