@@ -26,8 +26,11 @@ socket.addEventListener("message", (event) => {
             console.log("message");
         }
         if(message.type === "redirectToGame") {
-            console.log("CA REDIRECT TO GAME.JSP");
-            window.location.href = "Game.jsp";
+            const confirmed = confirm("Voulez-vous rejoindre la partie ?");
+            if (confirmed) {
+                console.log("CA REDIRECT TO GAME.JSP");
+                window.location.href = "Game.jsp";
+            }
         }
 });
 
