@@ -49,7 +49,7 @@
 <script>
     $(document).ready(function() {
         $("#pseudo").on('blur', function() {
-            let pseudo = $(this).val();
+            let pseudo = $(this).val().trim();
             $.ajax({
                 url: 'ServletVerifierPseudo',
                 type: 'POST',
