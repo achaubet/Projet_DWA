@@ -67,6 +67,15 @@ public class LobbyWS {
                     System.out.println("User list update send");
                     updateUserList();
                     break;
+                case "redirectToGame":
+                    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+                    jsonObjectBuilder.add("type", "redirectToGame");
+                    JsonObject jsonObjectredirect = jsonObjectBuilder.build();
+                    String redirectMessage = jsonObjectredirect.toString();
+                    for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
+                        entry.getValue().getBasicRemote().sendText(redirectMessage);
+                    }
+                break;
                
             }
         }
