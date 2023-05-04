@@ -40,6 +40,7 @@ public class LobbyWS {
     // private static List<Session> sessions = new ArrayList<>();
     private static final ConcurrentHashMap<String, Session> sessionsHM = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, String> playerResponses = new ConcurrentHashMap<>(); // <Player, Response(yes,no,leader)>
+    private static String firstUser = null;
     
     @OnOpen
     public void onOpen(Session session, EndpointConfig EndpointConfig) throws IOException, Exception {
@@ -62,6 +63,9 @@ public class LobbyWS {
         if(jsonObject.containsKey("username")) {
             String username = jsonObject.getString("username");
             System.out.println(username);
+            if(firstUser == null) {
+                firstUser = username;
+            }
             sessionsHM.put(username, session);
             updateUserList();
         }
@@ -74,7 +78,7 @@ public class LobbyWS {
                 case "inviteSelectedUsers":
                     System.out.println("Received user list");
                     JsonArray selectedPlayersJson = jsonObject.getJsonArray("users");
-                    playerResponses.put(jsonObject.getString("leader"),"leader");
+                    //playerResponses.put(jsonObject.getString("leader"),"leader");
                     for(JsonValue player : selectedPlayersJson) {
                         System.out.println(((JsonString) player).getString());
                         if(sessionsHM.containsKey(((JsonString) player).getString())) {
@@ -89,11 +93,11 @@ public class LobbyWS {
                     break;
                 case "responseInvitation":
                     System.out.println("Repondu!");
-                    String reponse = jsonObject.getString("reponse");
-                    String user = jsonObject.getString("user");
-                    System.out.println(user + " à repondu: " +reponse);
-                    playerResponses.put(user, reponse);
-                    updateUserRespList();
+                    //String reponse = jsonObject.getString("reponse");
+                    //String user = jsonObject.getString("user");
+                    //System.out.println(user + " à repondu: " +reponse);
+                    //playerResponses.put(user, reponse);
+                    updateUserList();
                     break;
                 case "redirectToGame":
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -113,10 +117,17 @@ public class LobbyWS {
     @OnClose
     public void onClose(Session session, CloseReason close_reason) throws IOException, EncodeException {
         Iterator<Map.Entry<String, Session>> iterator = sessionsHM.entrySet().iterator();
+        String username = null;
         while(iterator.hasNext()) {
             Map.Entry<String, Session> entry = iterator.next();
             if(entry.getValue().equals(session)) {
+                username = entry.getKey();
                 iterator.remove();
+                if(username.equals(firstUser) && sessionsHM.size() > 0) {
+                    Iterator<String> it = sessionsHM.keySet().iterator();
+                    firstUser = it.next();
+                    becomeFirstUser();
+                }
                 updateUserList();
             }
         }
@@ -129,6 +140,10 @@ public class LobbyWS {
     }
     
     
+    private void becomeFirstUser() throws IOException, EncodeException {
+        System.out.println("Est devenu firstUser: " + firstUser);
+    }
+    
     private void updateUserList() throws IOException, EncodeException {
         List<String> users = new ArrayList<>(sessionsHM.keySet());
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -138,32 +153,18 @@ public class LobbyWS {
             jsonArrayBuilder.add(user);
         }
         jsonObjectBuilder.add("users", jsonArrayBuilder.build());
+        if(users.size() <= 0) {
+            firstUser = null;
+        }
+        if(firstUser != null) {
+            jsonObjectBuilder.add("leader", firstUser);
+        }
         JsonObject jsonObject = jsonObjectBuilder.build();
         String userListStr = jsonObject.toString();
         for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
             entry.getValue().getBasicRemote().sendText(userListStr);
         }
+
     }
-    
-    private void updateUserRespList() throws IOException, EncodeException {
-        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder.add("type", "userListConfirmed");
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for(Map.Entry<String, String> entry : playerResponses.entrySet()) {
-            if(entry.getValue().equals("yes")) {
-                jsonArrayBuilder.add(entry.getKey());
-            }
-        }
-        //jsonObjectBuilder.add("leader", )
-        jsonObjectBuilder.add("players", jsonArrayBuilder.build());
-        JsonObject jsonObject = jsonObjectBuilder.build();
-        String playerResponsesStr = jsonObject.toString();
-        for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
-            if((playerResponses.containsKey(entry.getKey())) && (playerResponses.get(entry.getKey()).equals("yes"))) {
-                entry.getValue().getBasicRemote().sendText(playerResponsesStr);
-            }
-        }
-        System.out.println("Accepted list updated");
-    }
-    
+        
 }
