@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
-const socket = new WebSocket("ws://localhost:8080/ProjetCulDeChouette/LobbyWS");
+const hostname = window.location.hostname;
+console.log(hostname);
+const socket = new WebSocket("ws://" + hostname + ":8080/ProjetCulDeChouette/LobbyWS");
 let firstUser;
 let hasInvited = false;
 // @OnOpen
@@ -56,21 +58,6 @@ socket.addEventListener("message", (event) => {
             userList.disableSelection();
         }
     }
-    /*if(message.type === "userListConfirmed") {
-        document.getElementById("user-list-confirmed-global").hidden = false;
-        document.getElementById("start-party-btn").hidden = false;
-        const sendInvitationsBtn = document.getElementById("send-invitations-btn");
-        sendInvitationsBtn.setAttribute("hidden", "");
-        const userList = $('#user-list-confirmed');
-        userList.empty();
-        message.players.forEach((user) => {
-            const li = $("<li>").text(user).addClass("draggable");
-            userList.append(li);
-        });
-        userList.sortable();
-        userList.disableSelection();
-        // swal.close();
-    }*/
     if(message.type === "invitation") {
         console.log("Invitation reçue !");
         let timer;
@@ -127,22 +114,26 @@ socket.addEventListener("message", (event) => {
         console.log("message");
     }
     if(message.type === "redirectToGame") {
-        // const confirmed = confirm("Voulez-vous rejoindre la partie ?");
         console.log("CA REDIRECT TO GAME.JSP");
         window.location.href = "Game.jsp";
+    }
+    if(message.type === "redirectToHomepage") {
+        window.location.href = "PageAccueil.jsp";
     }
 });
 
 
 const inviteButton = document.getElementById("send-invitations-btn");
 inviteButton.addEventListener("click",(event) => {
-    console.log("COUCOU");
     let playerSelected = [];
+    let playerNotSelected = [];
     const allCheckboxes = document.querySelectorAll(".player-checkbox");
     allCheckboxes.forEach((checkbox) => {
         if(checkbox.checked) {
             console.log(checkbox);
             playerSelected.push(checkbox.id);
+        } else {
+            playerNotSelected.push(checkbox.id);
         }
     });
     console.log(playerSelected);
@@ -159,7 +150,8 @@ inviteButton.addEventListener("click",(event) => {
         socket.send(JSON.stringify({
             message: "inviteSelectedUsers",
             leader: user.username, 
-            users: playerSelected
+            users: playerSelected,
+            notSelected: playerNotSelected
         }));
         const Toast = Swal.mixin({
             toast: true,
@@ -187,3 +179,12 @@ function updateUserList(){
 }
 
 // setInterval(updateUserList, 20000); // Set time to 20s otherwise the leader doesn't have the time to select the players 
+/*     Swal.fire({
+        title: 'En attente',
+        html: 'Attente de la connexion du pompier',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading()
+        },
+    })*/

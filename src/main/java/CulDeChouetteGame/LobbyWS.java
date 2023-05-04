@@ -77,6 +77,18 @@ public class LobbyWS {
                     break;
                 case "inviteSelectedUsers":
                     System.out.println("Received user list");
+                    JsonArray notSelectedPlayersJson = jsonObject.getJsonArray("notSelected");
+                    for(JsonValue player : notSelectedPlayersJson) {
+                        System.out.println(((JsonString) player).getString());
+                        if(sessionsHM.containsKey(((JsonString) player).getString())) {
+                            System.out.println("Coucou2");
+                            JsonObject redirectUser = javax.json.Json.createObjectBuilder()
+                                .add("type", "redirectToHomepage")
+                                .build();
+                            String redirectUserStr = redirectUser.toString();
+                            sessionsHM.get(((JsonString) player).getString()).getBasicRemote().sendText(redirectUserStr);
+                        }
+                    }
                     JsonArray selectedPlayersJson = jsonObject.getJsonArray("users");
                     //playerResponses.put(jsonObject.getString("leader"),"leader");
                     for(JsonValue player : selectedPlayersJson) {
@@ -93,11 +105,19 @@ public class LobbyWS {
                     break;
                 case "responseInvitation":
                     System.out.println("Repondu!");
-                    //String reponse = jsonObject.getString("reponse");
-                    //String user = jsonObject.getString("user");
-                    //System.out.println(user + " à repondu: " +reponse);
-                    //playerResponses.put(user, reponse);
                     updateUserList();
+                    break;
+                case "userNotSelected":
+                    System.out.println("User not selected!");
+                    String userNotSelected = jsonObject.getString("username");
+                    System.out.println("user not selected: " + userNotSelected);
+                    JsonObject redirectUser = javax.json.Json.createObjectBuilder()
+                        .add("type", "redirectToHomepage")
+                        .build();
+                    String redirectUserStr = redirectUser.toString();
+                    System.out.println("Avant sessionsHM");
+                    sessionsHM.get(userNotSelected).getBasicRemote().sendText(redirectUserStr);
+                    System.out.println("Apres sessionsHM");
                     break;
                 case "redirectToGame":
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
