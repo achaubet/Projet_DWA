@@ -32,7 +32,6 @@ public class ServletConnexion extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            System.out.println("This should be appear in the console");
             super.init();
             // Créer une instance de Personne et l'initialiser avec les données nécessaires
             CulDeChouetteDAOFactory factory = AbstractDAOFactory.getDAOFactory(PersistenceKind.JPA);
@@ -45,7 +44,6 @@ public class ServletConnexion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les valeurs saisies dans le formulaire
-        System.out.println("When a user try to connect");
         String pseudo = request.getParameter("pseudo");
         String mdp = request.getParameter("mdp");
         Joueur j = daoJoueur.connexionJoueur(pseudo, mdp);

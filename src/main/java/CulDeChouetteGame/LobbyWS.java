@@ -39,7 +39,7 @@ public class LobbyWS {
     
     // private static List<Session> sessions = new ArrayList<>();
     private static final ConcurrentHashMap<String, Session> sessionsHM = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<String, String> playerResponses = new ConcurrentHashMap<>(); // <Player, Response(yes,no,leader)>
+    private static final ArrayList<String> sortedUsers = new ArrayList<>();
     private static String firstUser = null;
     
     @OnOpen
@@ -81,7 +81,6 @@ public class LobbyWS {
                     for(JsonValue player : notSelectedPlayersJson) {
                         System.out.println(((JsonString) player).getString());
                         if(sessionsHM.containsKey(((JsonString) player).getString())) {
-                            System.out.println("Coucou2");
                             JsonObject redirectUser = javax.json.Json.createObjectBuilder()
                                 .add("type", "redirectToHomepage")
                                 .build();
@@ -104,22 +103,23 @@ public class LobbyWS {
                     }
                     break;
                 case "responseInvitation":
-                    System.out.println("Repondu!");
                     updateUserList();
                     break;
                 case "userNotSelected":
-                    System.out.println("User not selected!");
                     String userNotSelected = jsonObject.getString("username");
                     System.out.println("user not selected: " + userNotSelected);
                     JsonObject redirectUser = javax.json.Json.createObjectBuilder()
                         .add("type", "redirectToHomepage")
                         .build();
                     String redirectUserStr = redirectUser.toString();
-                    System.out.println("Avant sessionsHM");
                     sessionsHM.get(userNotSelected).getBasicRemote().sendText(redirectUserStr);
-                    System.out.println("Apres sessionsHM");
                     break;
                 case "redirectToGame":
+                    JsonArray usersSorted = jsonObject.getJsonArray("sortedUsers");
+                    for(JsonValue player: usersSorted) {
+                        System.out.println(player);
+                        sortedUsers.add(((JsonString) player).getString());
+                    }
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
                     jsonObjectBuilder.add("type", "redirectToGame");
                     JsonObject jsonObjectredirect = jsonObjectBuilder.build();
@@ -127,7 +127,7 @@ public class LobbyWS {
                     for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
                         entry.getValue().getBasicRemote().sendText(redirectMessage);
                     }
-                break;
+                    break;
                
             }
         }
@@ -185,6 +185,10 @@ public class LobbyWS {
             entry.getValue().getBasicRemote().sendText(userListStr);
         }
 
+    }
+    
+    private static ArrayList<String> getUserList() {
+        return LobbyWS.sortedUsers;
     }
         
 }

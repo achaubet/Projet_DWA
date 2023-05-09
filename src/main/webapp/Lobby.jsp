@@ -62,7 +62,18 @@
         // Ajouter un événement d'écouteur de clic au bouton
         startPartyBtn.addEventListener("click", (event) => {
             // Envoyer un message WebSocket à tous les utilisateurs connectés pour qu'ils redirigent leur page vers "Game.jsp"
-            socket.send(JSON.stringify({ message: "redirectToGame" }));
+            //const userListHTML = document.getElementById("user-list-confirmed");
+            const userList = $("#user-list-confirmed");
+            const usersListSortedLeader = [];
+            userList.children().each(function() {
+                usersListSortedLeader.push($(this).text());
+            });
+            //console.log(sortedTextArray);
+            //console.log(userList.innerHTML);
+            socket.send(JSON.stringify({ 
+                message: "redirectToGame", 
+                sortedUsers: usersListSortedLeader 
+            }));
         });
 
     </script>

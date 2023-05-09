@@ -1,6 +1,6 @@
-    <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    <!DOCTYPE html>
-    <html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
     <head>
         <meta charset="UTF-8">
         <title>Inscription</title>
@@ -38,41 +38,41 @@
                     <input type="text" name="ville" id="ville" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                 </div>
                 <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    S'inscrire
-                </button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        S'inscrire
+                    </button>
+                </div>
+            </form>
+            <div class="flex justify-center mt-8">
+                <a href="PageAccueil.jsp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Retour à la page d'accueil</a>
             </div>
-        </form>
-        <div class="flex justify-center mt-8">
-            <a href="PageAccueil.jsp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Retour à la page d'accueil</a>
         </div>
-    </div>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $("#pseudo").on('blur', function() {
-            let pseudo = $(this).val().trim();
-            $.ajax({
-                url: 'ServletVerifierPseudo',
-                type: 'POST',
-                data: {pseudo: pseudo},
-                success: function(reponse) {
-                    //console.log(JSON.parse(reponse));
-                    console.log(reponse);
-                    if(reponse.exist === true){
-                        $('#pseudo').addClass('border-red-500');
-                        $('#pseudo-error').text('Pseudo déjà existant, veuillez en choisir un autre.').show();
-                        $('button[type="submit"]').attr('disabled', true);
-                    } else {
-                        $('#pseudo').removeClass('border-red-500');
-                        $('#pseudo-error').hide();
-                        $('button[type="submit"]').attr('disabled', false);
-                    }
-                }.bind(this)
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#pseudo").on('blur', function () {
+                let pseudo = $(this).val().trim();
+                $.ajax({
+                    url: 'ServletVerifierPseudo',
+                    type: 'POST',
+                    data: {pseudo: pseudo},
+                    success: function (reponse) {
+                        //console.log(JSON.parse(reponse));
+                        console.log(reponse);
+                        if (reponse.exist === true) {
+                            $('#pseudo').addClass('border-red-500');
+                            $('#pseudo-error').text('Pseudo déjà existant, veuillez en choisir un autre.').show();
+                            $('button[type="submit"]').attr('disabled', true);
+                        } else {
+                            $('#pseudo').removeClass('border-red-500');
+                            $('#pseudo-error').hide();
+                            $('button[type="submit"]').attr('disabled', false);
+                        }
+                    }.bind(this)
+                });
             });
         });
-    });
-</script>
-    
+    </script>
+
 </html>
