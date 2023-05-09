@@ -75,6 +75,15 @@ socket.addEventListener("message", (event) => {
             clearTimeout(timer);
             switch(reponseInvit.value){
                 case true:
+                    swal.fire({
+                            title: 'En attente',
+                            html: 'En attente du début de la partie',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            didOpen: () => {
+                                swal.showLoading();
+                            }
+                    });
                     socket.send(JSON.stringify({
                         message: "responseInvitation", 
                         user: user.username, 
