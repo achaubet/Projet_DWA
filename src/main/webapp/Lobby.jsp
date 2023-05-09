@@ -75,7 +75,6 @@
                 sortedUsers: usersListSortedLeader 
             }));
         });
-
     </script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyWS.js"></script>
 </html>

@@ -73,8 +73,10 @@ socket.addEventListener("message", (event) => {
         }).then((reponseInvit) => {
             console.log(reponseInvit.value);
             clearTimeout(timer);
+            console.log("reponse invite");
             switch(reponseInvit.value){
                 case true:
+                    console.log("ICI????");
                     swal.fire({
                             title: 'En attente',
                             html: 'En attente du début de la partie',
