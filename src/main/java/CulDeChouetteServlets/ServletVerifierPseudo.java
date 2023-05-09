@@ -2,24 +2,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+package CulDeChouetteServlets;
+
 import CulDeChouetteDAO.AbstractDAOFactory;
 import CulDeChouetteDAO.CulDeChouetteDAOFactory;
 import CulDeChouetteDAO.DAOException;
 import CulDeChouetteDAO.IJoueur;
 import CulDeChouetteDAO.PersistenceKind;
+import POJO.Joueur;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.json.JsonObject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import POJO.Joueur;
-import com.mycompany.projetculdechouette.ServletConnexion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-@WebServlet("/ServletCreerCompte")
-public class ServletCreerCompte extends HttpServlet {
+/**
+ *
+ * @author Arnaud
+ */
+@WebServlet(name = "ServletVerifierPseudo", urlPatterns = {"/ServletVerifierPseudo"})
+public class ServletVerifierPseudo extends HttpServlet {
+    
     IJoueur daoJoueur = null;
     
     @Override
@@ -36,29 +45,19 @@ public class ServletCreerCompte extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer les valeurs saisies dans le formulaire
-        System.out.println(request);
         String pseudo = request.getParameter("pseudo");
-        String mdp = request.getParameter("mdp");
-        int age = Integer.parseInt(request.getParameter("age"));
-        char sexe = request.getParameter("sexe").charAt(0);
-        String ville = request.getParameter("ville");
-        
-        // Créer un nouvel objet Joueur avec les valeurs saisies
-        Joueur nouveauJoueur = new Joueur();
-        nouveauJoueur.setPseudo(pseudo);
-        nouveauJoueur.setMdp(mdp);
-        nouveauJoueur.setAge(age);
-        nouveauJoueur.setSexe(sexe);
-        nouveauJoueur.setVille(ville);
-        
+        System.out.println(pseudo);
         try {
-            daoJoueur.ajouterJoueur(nouveauJoueur);
+            boolean exist = daoJoueur.rechercherPseudoExistant(pseudo);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            JsonObject responseObject = javax.json.Json.createObjectBuilder()
+                .add("exist", exist)
+                .build();
+            String responseStr = responseObject.toString();
+            response.getWriter().write(responseStr);
         } catch (DAOException ex) {
             response.sendError(0, "Erreur de base de données");
         }
-
-        // Rediriger l'utilisateur vers une page de confirmation ou de succès
-        response.sendRedirect("PageAccueil.jsp");
     }
 }

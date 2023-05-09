@@ -9,7 +9,39 @@
         </session-timeout>
     </session-config>
     <servlet>
-        <servlet-name>Page d'accueil</servlet-name>
-        <servlet-class>PageAccueil</servlet-class>
+        <servlet-name>ServletConnexion</servlet-name>
+        <servlet-class>CulDeChouetteServlets.ServletConnexion</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletConnexion</servlet-name>
+        <url-pattern>/ServletConnexion</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletCreerCompte</servlet-name>
+        <servlet-class>CulDeChouetteServlets.ServletCreerCompte</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ServletCreerCompte</servlet-name>
+        <url-pattern>/ServletCreerCompte</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletModifierProfil</servlet-name>
+        <servlet-class>CulDeChouetteServlets.ServletModifierProfil</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletModifierProfil</servlet-name>
+        <url-pattern>/ServletModifierProfil</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletVerifierPseudo</servlet-name>
+        <servlet-class>CulDeChouetteServlets.ServletVerifierPseudo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletVerifierPseudo</servlet-name>
+        <url-pattern>/ServletVerifierPseudo</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>PageAccueil.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
