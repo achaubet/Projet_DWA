@@ -49,7 +49,15 @@ public class ServletConnexion extends HttpServlet {
         Joueur j = daoJoueur.connexionJoueur(pseudo, mdp);
         if(j == null) {
             System.out.println("Erreur de connexion");
-            response.sendError(0, "Mot de passe ou nom d'utilisateur incorrect");
+            String script = "Swal.fire({title: 'Erreur', icon: 'error', text: '\"Mot de passe ou nom utilisateur incorrect\"'}).then(function(result) { window.location.href = 'ConnexionCompte.jsp'; });";
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().write("<script src=\" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js \"></script>");
+            response.getWriter().write("<link href=\" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css \" rel=\"stylesheet\">");
+            response.getWriter().write("<script>" +
+                "window.addEventListener('load', function() {" +
+                    script +
+                "});" +
+            "</script>");
         } else {
             System.out.println("Connexion OK!");
             Cookie cookie = new Cookie("user", j.getPseudo());
