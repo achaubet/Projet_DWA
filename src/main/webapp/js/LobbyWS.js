@@ -190,12 +190,4 @@ function updateUserList(){
 }
 
 // setInterval(updateUserList, 20000); // Set time to 20s otherwise the leader doesn't have the time to select the players 
-/*     Swal.fire({
-        title: 'En attente',
-        html: 'Attente de la connexion du pompier',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-            Swal.showLoading()
-        },
-    })*/
+

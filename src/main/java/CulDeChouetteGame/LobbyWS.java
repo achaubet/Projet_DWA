@@ -48,7 +48,7 @@ public class LobbyWS {
         // properties = config.getUserProperties();
         // sessions.add(session);
         //session.getBasicRemote().sendText("Connecté à Java avec succès!");  //sendObject("Connecté à Java avec succès !");
-        JsonObject openMessage = javax.json.Json.createObjectBuilder()
+        JsonObject openMessage = Json.createObjectBuilder()
                 .add("message", "Connecté avec succès à Java")
                 .build();
         String messageString = openMessage.toString();
@@ -94,7 +94,7 @@ public class LobbyWS {
                         System.out.println(((JsonString) player).getString());
                         if(sessionsHM.containsKey(((JsonString) player).getString())) {
                             System.out.println("Coucou2");
-                            JsonObject invitationMessage = javax.json.Json.createObjectBuilder()
+                            JsonObject invitationMessage = Json.createObjectBuilder()
                                 .add("type", "invitation")
                                 .build();
                             String invitationString = invitationMessage.toString();
@@ -108,7 +108,7 @@ public class LobbyWS {
                 case "userNotSelected":
                     String userNotSelected = jsonObject.getString("username");
                     System.out.println("user not selected: " + userNotSelected);
-                    JsonObject redirectUser = javax.json.Json.createObjectBuilder()
+                    JsonObject redirectUser = Json.createObjectBuilder()
                         .add("type", "redirectToHomepage")
                         .build();
                     String redirectUserStr = redirectUser.toString();
@@ -187,7 +187,7 @@ public class LobbyWS {
 
     }
     
-    private static ArrayList<String> getUserList() {
+    public static ArrayList<String> getUserList() {
         return LobbyWS.sortedUsers;
     }
         
