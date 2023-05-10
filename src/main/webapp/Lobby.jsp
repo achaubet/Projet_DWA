@@ -5,23 +5,23 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-        <% String username = null;
-           int userID = 0;
-           Cookie[] cookies = request.getCookies();
-           if (cookies != null) {
-              for (Cookie cookie : cookies) {
-                 if (cookie.getName().equals("user")) {
-                    username = cookie.getValue();
-                 }
-                 if (cookie.getName().equals("id")) {
-                    userID = Integer.parseInt(cookie.getValue());
-                 }
-              }
-           }
-           if (username == null) {
-              response.sendRedirect("PageAccueil.jsp");
+<% String username = null;
+    int userID = 0;
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("user")) {
+                username = cookie.getValue();
             }
-        %>
+            if (cookie.getName().equals("id")) {
+                userID = Integer.parseInt(cookie.getValue());
+            }
+        }
+    }
+    if (username == null) {
+        response.sendRedirect("PageAccueil.jsp");
+    }
+%>
 <html>
 <head>
     <meta charset="UTF-8">

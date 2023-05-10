@@ -7,11 +7,16 @@ package CulDeChouetteGame;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.json.Json;
 import static javax.json.Json.createReader;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -31,9 +36,10 @@ public class CulDeChouetteWS {
     private static ConcurrentHashMap<String, Session> players = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Integer> scoreboard = new ConcurrentHashMap<>();
     private static ArrayList<String> playerOrder = null;
+    private static ArrayList<Integer> dices = new ArrayList<>();
     
     static {
-        playerOrder = initUserOrder();
+        playerOrder = Game.playerOrder;
         actualPlayer = playerOrder.get(0);
     }
     
@@ -64,14 +70,32 @@ public class CulDeChouetteWS {
                 .build();
             String messageString = firstUserToPlay.toString();
             session.getBasicRemote().sendText(messageString);
-            //updateScoreboard();
+            updateScoreboard();
         }
+        if(jsonObject.containsKey("message")) {
+            switch(jsonObject.getString("message")) {
+                case "rollDice":
+                    int dice1 = Game.rollDice();
+                    int dice2 = Game.rollDice();
+                    
+            }
+        }    
         jsonReader.close();
     }
 
     @OnClose
-    public void onClose(Session session) throws IOException {
-        // WebSocket connection closes
+    public void onClose(Session session, CloseReason close_reason) throws IOException {
+        Iterator<Map.Entry<String, Session>> iterator = players.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<String, Session> entry = iterator.next();
+            if(entry.getValue().equals(session)) {
+                iterator.remove();
+            }
+        }
+        if(players.isEmpty()) {
+            LobbyWS.resetUserList();
+        }
+        System.out.println("onClose: " + close_reason.getReasonPhrase());
     }
 
     @OnError
@@ -79,8 +103,24 @@ public class CulDeChouetteWS {
         // Do error handling here
     }
     
-    private void updateScoreboard() {
-    
+    private void updateScoreboard() throws IOException {
+        JsonArrayBuilder playersScoreArrayBuilder = Json.createArrayBuilder();
+        for(Map.Entry<String, Integer> entry : scoreboard.entrySet()) {
+            String player = entry.getKey();
+            int score = entry.getValue();
+
+            JsonObjectBuilder playerScoreBuilder = Json.createObjectBuilder()
+                    .add(player, score);
+
+            playersScoreArrayBuilder.add(playerScoreBuilder);
+        }
+        JsonObject scoreboardJson = Json.createObjectBuilder()
+                .add("type", "scoreboard")
+                .add("playersScore", playersScoreArrayBuilder)
+                .build();
+        for(Session player : players.values()) {
+            player.getBasicRemote().sendText(scoreboardJson.toString());
+        }
     }
     
     public static ArrayList<String> initUserOrder() {

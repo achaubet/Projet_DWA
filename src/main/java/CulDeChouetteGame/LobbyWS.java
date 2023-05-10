@@ -115,6 +115,7 @@ public class LobbyWS {
                     sessionsHM.get(userNotSelected).getBasicRemote().sendText(redirectUserStr);
                     break;
                 case "redirectToGame":
+                    Game.setPlayerOrder(sortedUsers);
                     JsonArray usersSorted = jsonObject.getJsonArray("sortedUsers");
                     for(JsonValue player: usersSorted) {
                         System.out.println(player);
@@ -189,6 +190,10 @@ public class LobbyWS {
     
     public static ArrayList<String> getUserList() {
         return LobbyWS.sortedUsers;
+    }
+    
+    public static void resetUserList() {
+        LobbyWS.sortedUsers.clear();
     }
         
 }
