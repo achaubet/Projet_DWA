@@ -115,11 +115,12 @@ public class LobbyWS {
                     sessionsHM.get(userNotSelected).getBasicRemote().sendText(redirectUserStr);
                     break;
                 case "redirectToGame":
-                    Game.setPlayerOrder(sortedUsers);
+                    // Game.setPlayerOrder(sortedUsers);
                     JsonArray usersSorted = jsonObject.getJsonArray("sortedUsers");
                     for(JsonValue player: usersSorted) {
                         System.out.println(player);
-                        sortedUsers.add(((JsonString) player).getString());
+                        Game.playerOrder.add(((JsonString) player).getString());
+                        // sortedUsers.add(((JsonString) player).getString());
                     }
                     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
                     jsonObjectBuilder.add("type", "redirectToGame");

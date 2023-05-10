@@ -40,7 +40,12 @@ public class CulDeChouetteWS {
     
     static {
         playerOrder = Game.playerOrder;
-        actualPlayer = playerOrder.get(0);
+        if(playerOrder.size() != 0) {
+            actualPlayer = playerOrder.get(0);            
+        } else {
+            System.out.println("Erreur, tableau non initilaisé!");
+        }
+        
     }
     
     @OnOpen

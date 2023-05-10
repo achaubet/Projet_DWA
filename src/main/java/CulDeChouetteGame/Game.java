@@ -12,11 +12,8 @@ import java.util.ArrayList;
  */
 public class Game {
     
-    public static ArrayList<String> playerOrder;
+    public static ArrayList<String> playerOrder = new ArrayList<>();
     
-    public static void setPlayerOrder(ArrayList<String> players) {
-        playerOrder = new ArrayList<>(players);
-    }
     
     public static int rollDice() {
         return (int) (Math.random() * 6) + 1;
