@@ -72,6 +72,20 @@ ws.addEventListener("message", (event) => {
         caillouBtn.classList.add('hover:bg-blue-700');
         caillouBtn.addEventListener("click", caillouClickHandler);
     }
+    if(message.type === "endGame") {
+        console.log("Partie terminée !");
+        swal.fire({
+            title: 'La partie est terminée !',
+            icon: 'info',
+            showDenyButton: false,
+            showCancelButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            window.location.href = "PageAccueil.jsp";
+        });
+    }
 });
 
 const grelotteClickHandler = () => {

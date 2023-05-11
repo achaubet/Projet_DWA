@@ -22,8 +22,11 @@ socket.addEventListener("message", (event) => {
     }
     if(message.type === "userList") {
         if(hasInvited) {
+            console.log("Has Invited!!!");
             document.getElementById("user-list-confirmed-global").hidden = false;
             document.getElementById("start-party-btn").hidden = false;
+            document.getElementById("score-max-input").hidden = false;
+            document.getElementById("score-max-text").hidden = false;
             const sendInvitationsBtn = document.getElementById("send-invitations-btn");
             sendInvitationsBtn.setAttribute("hidden", "");
             const userList = $('#user-list-confirmed');

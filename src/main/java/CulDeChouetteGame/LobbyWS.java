@@ -15,6 +15,7 @@ import javax.json.Json;
 import static javax.json.Json.createReader;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
@@ -93,7 +94,6 @@ public class LobbyWS {
                     for(JsonValue player : selectedPlayersJson) {
                         System.out.println(((JsonString) player).getString());
                         if(sessionsHM.containsKey(((JsonString) player).getString())) {
-                            System.out.println("Coucou2");
                             JsonObject invitationMessage = Json.createObjectBuilder()
                                 .add("type", "invitation")
                                 .build();
@@ -116,6 +116,9 @@ public class LobbyWS {
                     break;
                 case "redirectToGame":
                     // Game.setPlayerOrder(sortedUsers);
+                    String maxScoreStr = jsonObject.getString("maxScore");
+                    int maxScore = Integer.parseInt(maxScoreStr);
+                    Game.scoreMax = maxScore;
                     JsonArray usersSorted = jsonObject.getJsonArray("sortedUsers");
                     for(JsonValue player: usersSorted) {
                         System.out.println(player);

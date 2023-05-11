@@ -48,7 +48,11 @@
         <div class="flex justify-center">
             <button id="send-invitations-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">Send Invitations</button>
         </div>
-        <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline" hidden>Start Party</button>
+        <div class="flex justify-center">
+            <label for="score-max-input" id="score-max-text" hidden>Score maximum :</label>
+            <input type="number" id="score-max-input" min="1" value="343" class="mx-2" hidden>
+            <button id="start-party-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline" hidden>Start Party</button>
+        </div>
     </div>
     </body>
     <script>
@@ -68,11 +72,14 @@
             userList.children().each(function() {
                 usersListSortedLeader.push($(this).text());
             });
+            let maxScore = document.getElementById("score-max-input").value;
+            console.log(maxScore);
             //console.log(sortedTextArray);
             //console.log(userList.innerHTML);
             socket.send(JSON.stringify({ 
                 message: "redirectToGame", 
-                sortedUsers: usersListSortedLeader 
+                sortedUsers: usersListSortedLeader,
+                maxScore: maxScore
             }));
         });
     </script>

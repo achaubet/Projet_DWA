@@ -218,14 +218,16 @@ public class CulDeChouetteWS {
     }
     
     private void updateScoreboard() throws IOException {
+        int maxScore = 0;
         JsonArrayBuilder playersScoreArrayBuilder = Json.createArrayBuilder();
         for(Map.Entry<String, Integer> entry : scoreboard.entrySet()) {
             String player = entry.getKey();
             int score = entry.getValue();
-
+            if(score > maxScore) {
+                maxScore = score;
+            }
             JsonObjectBuilder playerScoreBuilder = Json.createObjectBuilder()
                     .add(player, score);
-
             playersScoreArrayBuilder.add(playerScoreBuilder);
         }
         JsonObject scoreboardJson = Json.createObjectBuilder()
@@ -235,6 +237,21 @@ public class CulDeChouetteWS {
         for(Session player : players.values()) {
             player.getBasicRemote().sendText(scoreboardJson.toString());
         }
+        if(maxScore >= Game.scoreMax) {
+            System.out.println("Partie terminée !");
+            persistData();
+            JsonObject endGame = Json.createObjectBuilder()
+                .add("type", "endGame")
+                .build();
+            for(Session player : players.values()) {
+                player.getBasicRemote().sendText(endGame.toString());
+            }
+            
+        }
+    }
+    
+    private void persistData() {
+    
     }
     
     public static ArrayList<String> initUserOrder() {
