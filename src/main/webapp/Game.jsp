@@ -41,7 +41,7 @@
                 </ul>
             </div>
             
-            <div class="dice mt-auto">
+            <div class="dice mt-auto flex-col">
                 <p id="chouette-number" class="text-7xl indent-96"></p>
                 <p id="cul-number" class="text-7xl indent-96"></p>
             </div>
@@ -53,7 +53,14 @@
                 <button id="roll-cul-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" hidden>
                     Lancer le Cul
                 </button>
+                <button id="grelotte-picotte-btn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">
+                    Grelotte ça picotte !
+                </button>
+                <button id="pas-mou-caillou-btn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">
+                    Pas mou le caillou !
+                </button>
             </div>
+
 
             <div class="current-player mt-auto">
                 <p class="text-center">

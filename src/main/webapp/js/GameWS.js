@@ -4,6 +4,9 @@
  */
 
 const ws = new WebSocket("ws://" + window.location.hostname + ":8080/ProjetCulDeChouette/CulDeChouetteWS");
+const grelotteBtn = document.getElementById("grelotte-picotte-btn");
+const caillouBtn = document.getElementById("pas-mou-caillou-btn");
+
 let actualPlayer;
 // @OnOpen
 ws.addEventListener("open", (event) => {
@@ -53,8 +56,42 @@ ws.addEventListener("message", (event) => {
     if(message.type === "diceCulResult") {
         console.log("Recepetion des resultats du Cul");
         document.getElementById("cul-number").innerHTML = "Cul: " +  message.dice;
+        document.getElementById("roll-cul-btn").hidden = true;
+    }
+    if(message.type === "activateSuiteButton") {
+        grelotteBtn.classList.remove('bg-red-500');
+        grelotteBtn.classList.remove('hover:bg-red-700');
+        grelotteBtn.classList.add('bg-blue-500');
+        grelotteBtn.classList.add('hover:bg-blue-700');
+        grelotteBtn.addEventListener("click", grelotteClickHandler);   
+    }
+    if(message.type === "activateChouetteVelute") {
+        caillouBtn.classList.remove('bg-red-500');
+        caillouBtn.classList.remove('hover:bg-red-700');
+        caillouBtn.classList.add('bg-blue-500');
+        caillouBtn.classList.add('hover:bg-blue-700');
+        caillouBtn.addEventListener("click", caillouClickHandler);
     }
 });
+
+const grelotteClickHandler = () => {
+    ws.send(JSON.stringify({message: "interactionSuite", player: user.username}));
+    grelotteBtn.removeEventListener("click", grelotteClickHandler);
+    grelotteBtn.classList.remove('bg-blue-500');
+    grelotteBtn.classList.remove('hover:bg-blue-700');
+    grelotteBtn.classList.add('bg-red-500');
+    grelotteBtn.classList.add('hover:bg-red-700');
+};
+
+const caillouClickHandler = () => {
+    ws.send(JSON.stringify({message: "interactionChouetteVelute", player: user.username}));
+    caillouBtn.removeEventListener("click", caillouClickHandler);
+    caillouBtn.classList.remove('bg-blue-500');
+    caillouBtn.classList.remove('hover:bg-blue-700');
+    caillouBtn.classList.add('bg-red-500');
+    caillouBtn.classList.add('hover:bg-red-700');
+};
+
 
 document.getElementById("roll-chouette-btn").addEventListener("click", () => {
     ws.send(JSON.stringify({message: "rollDiceChouette", player: user.username}));

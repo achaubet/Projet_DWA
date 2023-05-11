@@ -37,6 +37,7 @@ public class CulDeChouetteWS {
     private static ConcurrentHashMap<String, Integer> scoreboard = new ConcurrentHashMap<>();
     private static ArrayList<String> playerOrder = null;
     private static ArrayList<Integer> dices = new ArrayList<>();
+    private static ArrayList<String> interaction = new ArrayList<>();
     
     static {
         playerOrder = Game.playerOrder;
@@ -103,6 +104,58 @@ public class CulDeChouetteWS {
                     for(Session player: players.values()) {
                         player.getBasicRemote().sendText(serialJsonCulResult);
                     }
+                    if(Game.detectInteraction()) {
+                        if(Game.areConsecutives) {
+                            // TODO envoyer message client attente interraction
+                            JsonObject activateSuite = Json.createObjectBuilder()
+                            .add("type", "activateSuiteButton")
+                            .build();
+                            String activateSuiteStr = activateSuite.toString();
+                            for(Session player: players.values()) {
+                                player.getBasicRemote().sendText(activateSuiteStr);
+                            }
+                            Game.areConsecutives = false;
+                        }
+                        if(Game.areChouetteVelute) {
+                            JsonObject activateCv = Json.createObjectBuilder()
+                            .add("type", "activateChouetteVelute")
+                            .build();
+                            String activateCvStr = activateCv.toString();
+                            for(Session player: players.values()) {
+                                player.getBasicRemote().sendText(activateCvStr);
+                            }
+                            Game.areChouetteVelute = false;
+                        }
+                    } else {
+                        updatePlayerScore();
+                        nextPlayer();
+                    }
+                    break;
+                case "interactionSuite":
+                    String playerSuite = jsonObject.getString("player");
+                    interaction.add(playerSuite);
+                    if(interaction.size() == playerOrder.size()) {
+                        System.out.println("All players have responded");
+                        String playerLost = interaction.get(interaction.size() - 1); // Selection du perdant
+                        Game.setSuiteLoose(playerLost);
+                        playerLostSuite(playerLost);
+                        interaction.clear();
+                        Game.lastPlayerResults.clear();
+                        nextPlayer();
+                    }
+                    break;
+                case "interactionChouetteVelute":
+                    String playerCv = jsonObject.getString("player");
+                    interaction.add(playerCv);
+                    if(interaction.size() == playerOrder.size()) {
+                        System.out.println("All players have responded");
+                        String playerWin = interaction.get(0); // Selection du gagnant
+                        Game.setChouetteVelueWinner(playerWin);
+                        playerWinCv(playerWin);
+                        interaction.clear();
+                        Game.lastPlayerResults.clear();
+                        nextPlayer();
+                    }
                     break;
             }
         }    
@@ -128,6 +181,40 @@ public class CulDeChouetteWS {
     @OnError
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
+    }
+    
+    private void nextPlayer() throws IOException {
+        int i = playerOrder.lastIndexOf(actualPlayer);
+        System.out.println("Last play pos: " + i);
+        actualPlayer = playerOrder.get((i + 1) % playerOrder.size());
+        JsonObject firstUserToPlay = Json.createObjectBuilder()
+            .add("type", "actualPlayer")
+            .add("player", actualPlayer)
+            .build();
+        String nextPlayerStr = firstUserToPlay.toString();
+        for(Session player : players.values()) {
+            player.getBasicRemote().sendText(nextPlayerStr);
+        }
+    }
+    
+    private void playerWinCv(String player) throws IOException {
+        int oldScore = scoreboard.get(player);
+        int score = Game.calculateScore();
+        scoreboard.put(player, oldScore + score);
+        updateScoreboard();
+    }
+    
+    private void playerLostSuite(String player) throws IOException {
+        int oldScore = scoreboard.get(player);
+        scoreboard.put(player, oldScore - 10);
+        updateScoreboard();
+    }
+    
+    private void updatePlayerScore() throws IOException {
+        int score = Game.calculateScore();
+        int oldScore = scoreboard.get(actualPlayer);
+        scoreboard.put(actualPlayer, oldScore + score);
+        updateScoreboard();
     }
     
     private void updateScoreboard() throws IOException {
