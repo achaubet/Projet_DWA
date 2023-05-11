@@ -41,9 +41,17 @@
                 </ul>
             </div>
             
+            <div class="dice mt-auto">
+                <p id="chouette-number" class="text-7xl indent-96"></p>
+                <p id="cul-number" class="text-7xl indent-96"></p>
+            </div>
+            
             <div class="flex justify-center items-center mt-auto">
-                <button id="roll-dice-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Lancer les Dés
+                <button id="roll-chouette-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Lancer la Chouette
+                </button>
+                <button id="roll-cul-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" hidden>
+                    Lancer le Cul
                 </button>
             </div>
 
@@ -53,9 +61,6 @@
                     <p id="actualPlayer" class="text-2xl font-bold"></p>
                 </p>
             </div>
-
-            <div class="dice" id="dice-number"></div>
-            <div class="dice" id="dice-number2"></div>
         </div>
         <script>
             const user = {

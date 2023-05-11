@@ -36,15 +36,31 @@ ws.addEventListener("message", (event) => {
         console.log("Joueur actuel: " + actualPlayer);
         document.getElementById('actualPlayer').innerHTML = actualPlayer;
         if(actualPlayer === user.username) {
-            document.getElementById("rool-dice-btn").hidden = false;
+            document.getElementById("roll-chouette-btn").hidden = false;
         } else {
-            document.getElementById("rool-dice-btn").hidden = true;
+            document.getElementById("roll-chouette-btn").hidden = true;
         }
+    }
+    if(message.type === "diceChouetteResult") {
+        console.log("Recepetion des resultats de la Chouette");
+        document.getElementById("chouette-number").innerHTML = "Chouette: " +  message.dice1 + "   et   " + message.dice2;
+        // document.getElementById("dice-number2").innerHTML = message.dice2;
+        if(actualPlayer === user.username) {
+            document.getElementById("roll-chouette-btn").hidden = true;
+            document.getElementById("roll-cul-btn").hidden = false;
+        }
+    }
+    if(message.type === "diceCulResult") {
+        console.log("Recepetion des resultats du Cul");
+        document.getElementById("cul-number").innerHTML = "Cul: " +  message.dice;
     }
 });
 
-document.getElementById("roll-dice-btn").addEventListener("click", () => {
-    // Send a request to roll the dice
-    ws.send(JSON.stringify({type: "roll_dice", player: user.username}));
+document.getElementById("roll-chouette-btn").addEventListener("click", () => {
+    ws.send(JSON.stringify({message: "rollDiceChouette", player: user.username}));
+});
+
+document.getElementById("roll-cul-btn").addEventListener("click", () => {
+    ws.send(JSON.stringify({message: "rollDiceCul", player: user.username}));
 });
 

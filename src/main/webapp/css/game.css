@@ -7,3 +7,15 @@
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.dice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dice-number {
+  font-size: 3em;
+  margin: 0 5em;
+  white-space: nowrap;
+}
+

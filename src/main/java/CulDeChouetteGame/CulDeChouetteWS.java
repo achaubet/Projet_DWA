@@ -40,7 +40,7 @@ public class CulDeChouetteWS {
     
     static {
         playerOrder = Game.playerOrder;
-        if(playerOrder.size() != 0) {
+        if(!playerOrder.isEmpty()) {
             actualPlayer = playerOrder.get(0);            
         } else {
             System.out.println("Erreur, tableau non initilaisé!");
@@ -79,10 +79,31 @@ public class CulDeChouetteWS {
         }
         if(jsonObject.containsKey("message")) {
             switch(jsonObject.getString("message")) {
-                case "rollDice":
+                case "rollDiceChouette":
+                    Game.lastPlayerResults.clear();
                     int dice1 = Game.rollDice();
                     int dice2 = Game.rollDice();
-                    
+                    JsonObject diceChouetteResult = Json.createObjectBuilder()
+                            .add("type", "diceChouetteResult")
+                            .add("dice1", dice1)
+                            .add("dice2", dice2)
+                            .build();
+                    String serialJsonChouetteResult = diceChouetteResult.toString();
+                    for(Session player: players.values()) {
+                        player.getBasicRemote().sendText(serialJsonChouetteResult);
+                    }
+                    break;
+                case "rollDiceCul":
+                    int dice3 = Game.rollDice();
+                    JsonObject diceCulResult = Json.createObjectBuilder()
+                            .add("type", "diceCulResult")
+                            .add("dice", dice3)
+                            .build();
+                    String serialJsonCulResult = diceCulResult.toString();
+                    for(Session player: players.values()) {
+                        player.getBasicRemote().sendText(serialJsonCulResult);
+                    }
+                    break;
             }
         }    
         jsonReader.close();
@@ -99,6 +120,7 @@ public class CulDeChouetteWS {
         }
         if(players.isEmpty()) {
             LobbyWS.resetUserList();
+            Game.clearGameData();
         }
         System.out.println("onClose: " + close_reason.getReasonPhrase());
     }
