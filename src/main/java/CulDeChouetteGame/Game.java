@@ -22,6 +22,8 @@ public class Game {
     public static ConcurrentHashMap<String, Boolean> suitesData = new ConcurrentHashMap<>();
     public static Boolean areConsecutives = false;
     public static Boolean areChouetteVelute = false;
+    public static int nbCv = 0;
+    public static int nbSuites = 0;
        
     
     public static int rollDice() {
@@ -57,6 +59,7 @@ public class Game {
         // Si velute détéctée
         if((dice1 == dice2) && (dice1 + dice2 == dice3)) {
             System.out.println("VELUTE DETECTEE");
+            nbCv++;
             areChouetteVelute = true;
             return true;
         }
@@ -65,6 +68,7 @@ public class Game {
         Arrays.sort(orderedList);
         if((orderedList[0] + 1 == orderedList[1]) && (orderedList[1] + 1 == orderedList[2])) {
             System.out.println("VALUES ARE CONseCutives");
+            nbSuites++;
             areConsecutives = true;
             return true;
         }
@@ -96,5 +100,7 @@ public class Game {
         lastPlayerResults.clear();
         chouettesVeluesData.clear();
         suitesData.clear();
+        nbCv = 0;
+        nbSuites= 0;
     }
 }

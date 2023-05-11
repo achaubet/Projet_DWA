@@ -4,9 +4,20 @@
  */
 package CulDeChouetteGame;
 
+import CulDeChouetteDAO.AbstractDAOFactory;
+import CulDeChouetteDAO.CulDeChouetteDAOFactory;
+import CulDeChouetteDAO.DAOException;
+import CulDeChouetteDAO.IJoueur;
+import CulDeChouetteDAO.IJoueursPartie;
+import CulDeChouetteDAO.IPartie;
+import CulDeChouetteDAO.PersistenceKind;
+import POJO.Joueur;
+import POJO.JoueursPartie;
+import POJO.Partie;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,7 +72,7 @@ public class CulDeChouetteWS {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message, Session session) throws IOException, DAOException {
         System.out.println("Message recu: " + message);
         JsonReader jsonReader = createReader(new StringReader(message)); // Transformation du message en JSON
         JsonObject jsonObject = jsonReader.readObject();
@@ -197,27 +208,27 @@ public class CulDeChouetteWS {
         }
     }
     
-    private void playerWinCv(String player) throws IOException {
+    private void playerWinCv(String player) throws IOException, DAOException {
         int oldScore = scoreboard.get(player);
         int score = Game.calculateScore();
         scoreboard.put(player, oldScore + score);
         updateScoreboard();
     }
     
-    private void playerLostSuite(String player) throws IOException {
+    private void playerLostSuite(String player) throws IOException, DAOException {
         int oldScore = scoreboard.get(player);
         scoreboard.put(player, oldScore - 10);
         updateScoreboard();
     }
     
-    private void updatePlayerScore() throws IOException {
+    private void updatePlayerScore() throws IOException, DAOException {
         int score = Game.calculateScore();
         int oldScore = scoreboard.get(actualPlayer);
         scoreboard.put(actualPlayer, oldScore + score);
         updateScoreboard();
     }
     
-    private void updateScoreboard() throws IOException {
+    private void updateScoreboard() throws IOException, DAOException {
         int maxScore = 0;
         JsonArrayBuilder playersScoreArrayBuilder = Json.createArrayBuilder();
         for(Map.Entry<String, Integer> entry : scoreboard.entrySet()) {
@@ -250,8 +261,8 @@ public class CulDeChouetteWS {
         }
     }
     
-    private void persistData() {
-    
+    private void persistData() throws DAOException {
+
     }
     
     public static ArrayList<String> initUserOrder() {

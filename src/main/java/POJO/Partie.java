@@ -5,6 +5,7 @@
 package POJO;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -45,6 +46,12 @@ public class Partie implements Serializable {
     @Column(name = "DATE_PARTIE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datePartie;
+    @Column(name = "SCORE_MAX")
+    private int scoreMax;
+    @Column(name = "NB_CV")
+    private int nbCv;
+    @Column(name = "NB_SUITES")
+    private int nbSuites;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partie")
     private List<JoueursPartie> joueursPartieList;
 
@@ -101,6 +108,30 @@ public class Partie implements Serializable {
     @Override
     public String toString() {
         return "POJO.Partie[ codePartie=" + codePartie + " ]";
+    }
+
+    public int getScoreMax() {
+        return scoreMax;
+    }
+
+    public void setScoreMax(int scoreMax) {
+        this.scoreMax = scoreMax;
+    }
+
+    public int getNbCv() {
+        return nbCv;
+    }
+
+    public void setNbCv(int nbCv) {
+        this.nbCv = nbCv;
+    }
+
+    public int getNbSuites() {
+        return nbSuites;
+    }
+
+    public void setNbSuites(int nbSuites) {
+        this.nbSuites = nbSuites;
     }
     
 }
