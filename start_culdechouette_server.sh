@@ -7,4 +7,4 @@ mvn clean install
 # Copie du fichier war vers le dossier de déploiement de tomcat
 cp target/ProjetCulDeChouette-1.0.war $CATALINA_HOME/webapps/
 # Démarrage de Tomcat Catalina
-$CATALINA_HOME/bin/catalina.sh
+$CATALINA_HOME/bin/catalina.sh run
