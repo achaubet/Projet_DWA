@@ -47,8 +47,7 @@ public class CulDeChouetteWS {
     private static ConcurrentHashMap<String, Session> players = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Integer> scoreboard = new ConcurrentHashMap<>();
     private static ArrayList<String> playerOrder = null;
-    private static ArrayList<Integer> dices = new ArrayList<>();
-    private static ArrayList<String> interaction = new ArrayList<>();
+    private static final ArrayList<String> interaction = new ArrayList<>();
     
     static {
         playerOrder = Game.playerOrder;
@@ -57,7 +56,6 @@ public class CulDeChouetteWS {
         } else {
             System.out.println("Erreur, tableau non initilaisé!");
         }
-        
     }
     
     @OnOpen
@@ -250,14 +248,16 @@ public class CulDeChouetteWS {
         }
         if(maxScore >= Game.scoreMax) {
             System.out.println("Partie terminée !");
-            persistData();
+            if(maxScore > 0) {
+                persistData();
+            }
             JsonObject endGame = Json.createObjectBuilder()
                 .add("type", "endGame")
                 .build();
             for(Session player : players.values()) {
                 player.getBasicRemote().sendText(endGame.toString());
             }
-            
+            maxScore = 0;
         }
     }
     
@@ -279,15 +279,15 @@ public class CulDeChouetteWS {
             for(int i = 0; i < Game.chouettesVeluesDataKey.size(); i++) {
                 String currentPlayer = Game.chouettesVeluesDataKey.get(i);
                 boolean cvLost = Game.chouettesVeluesDataObject.get(i);
-                if(currentPlayer.equals(player) && cvLost) {
+                if(currentPlayer.equals(player) && !cvLost) {
                     nbCvPerdues++;
                 }
             }
             for(int i = 0; i < Game.suitesDataKey.size(); i++) {
                 String currentPlayer = Game.suitesDataKey.get(i);
-                boolean cvLost = Game.suitesDataObject.get(i);
-                if(currentPlayer.equals(player) && cvLost) {
-                    nbCvPerdues++;
+                boolean suitesWin = Game.suitesDataObject.get(i);
+                if(currentPlayer.equals(player) && suitesWin) {
+                    nbSuitesGagnees++;
                 }
             }
             Joueur j = daoJoueur.rechercherJoueurParPseudo(player);
@@ -295,8 +295,13 @@ public class CulDeChouetteWS {
             jp.setScore(score);
             jp.setCvPerdues(nbCvPerdues);
             jp.setSuiteGagnees(nbSuitesGagnees);
+            jp.setPartie(p);
+            jp.setJoueur(j);
             daoJp.ajouterJoueursPartie(jp);
+            daoJoueur.updateAllJoueursStats();
         }
+        System.out.println("Persist Party Data Ok");
+        scoreboard.clear();
     }
     
     public static ArrayList<String> initUserOrder() {

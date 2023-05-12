@@ -6,6 +6,7 @@ package CulDeChouetteDAO;
 
 import POJO.Joueur;
 import POJO.JoueursPartie;
+import POJO.Partie;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -162,7 +163,7 @@ public class JoueurDAO_JPA implements IJoueur {
             return null;
         }
     }
-
+    
     @Override
     public void updateAllJoueursStats() throws DAOException {
         List<Joueur> joueurs = this.rechercherTousLesJoueurs();
@@ -170,28 +171,46 @@ public class JoueurDAO_JPA implements IJoueur {
             List<JoueursPartie> joueurParties = this.rechercherPartieParIdJoueur(joueur.getCodeJoueur());
             joueur.setJoueursPartieList(joueurParties);
             int nbParties = joueurParties.size();
+            int nbCvTotal = 0;
+            int nbSuitesTotal = 0;
             if(nbParties > 0) {
                 int nbVictoires = 0;
                 int scoreTotal = 0;
                 int nbSuitesGagnees = 0;
                 int nbCvPerdues = 0;
                 for(JoueursPartie joueurPartie: joueurParties) {
-                    if(joueurPartie.getScore() >= 343) {
+                    Partie p = joueurPartie.getPartie();
+                    if(joueurPartie.getScore() >= p.getScoreMax()) {
                         nbVictoires++;
                     }
+                    nbCvTotal += p.getNbCv();
+                    nbSuitesTotal += p.getNbSuites();
                     scoreTotal += joueurPartie.getScore();
                     nbSuitesGagnees += joueurPartie.getSuiteGagnees();
                     nbCvPerdues += joueurPartie.getCvPerdues();
                 }
-                float scoreMoyen = (float) scoreTotal / nbParties ; 
-                float moySuitesGagnees = (float) nbSuitesGagnees / nbParties;
-                float moyCvPerdues = (float) nbCvPerdues / nbParties;
+                float scoreMoyen = (float) scoreTotal / nbParties; 
+                float moySuitesGagnees = 0;
+                float moyCvPerdues = 0;
+                if(nbCvTotal > 0) {
+                    moyCvPerdues = (float) nbCvPerdues / nbCvTotal;
+                }
+                if(nbSuitesTotal > 0) {
+                    moySuitesGagnees = (float) nbSuitesGagnees / nbSuitesTotal;
+                }
                 float nbMoyenVictoires = (float) nbVictoires / nbParties;
                 joueur.setMoyCvPerdues(moyCvPerdues);
                 joueur.setMoySuitesGagnees(moySuitesGagnees);
                 joueur.setScoreMoyen(scoreMoyen);
                 joueur.setNbVictoires(nbVictoires);
                 joueur.setNbMoyenVictoires(nbMoyenVictoires);
+                this.modifierJoueur(joueur);
+            } else {
+                joueur.setMoyCvPerdues(0);
+                joueur.setMoySuitesGagnees(0);
+                joueur.setScoreMoyen(0);
+                joueur.setNbVictoires(0);
+                joueur.setNbMoyenVictoires(0);
                 this.modifierJoueur(joueur);
             }
         }

@@ -56,10 +56,10 @@ public class Game {
         int dice1 = lastPlayerResults.get(0);
         int dice2 = lastPlayerResults.get(1);
         int dice3 = lastPlayerResults.get(2);
-        // Si velute détéctée
+        // Si Chouette velute détéctée
         if((dice1 == dice2) && (dice1 + dice2 == dice3)) {
             System.out.println("VELUTE DETECTEE");
-            nbCv++;
+            nbCv += 1;
             areChouetteVelute = true;
             return true;
         }
@@ -68,7 +68,7 @@ public class Game {
         Arrays.sort(orderedList);
         if((orderedList[0] + 1 == orderedList[1]) && (orderedList[1] + 1 == orderedList[2])) {
             System.out.println("VALUES ARE CONseCutives");
-            nbSuites++;
+            nbSuites += 1;
             areConsecutives = true;
             return true;
         }
@@ -111,6 +111,7 @@ public class Game {
         suitesDataKey.clear();
         suitesDataObject.clear();
         nbCv = 0;
-        nbSuites= 0;
+        nbSuites = 0;
+        scoreMax = 343; 
     }
 }

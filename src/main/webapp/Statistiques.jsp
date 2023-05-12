@@ -35,10 +35,10 @@
                     <th class="px-4 py-2">Genre</th>
                     <th class="px-4 py-2">Nb Parties Jouées</th>
                     <th class="px-4 py-2">Nb Victoires</th>
-                    <th class="px-4 py-2">Nb Victoires moyen</th>
+                    <th class="px-4 py-2">Nb Victoires moyen  %</th>
                     <th class="px-4 py-2">Score Moyen</th>
-                    <th class="px-4 py-2">Moyenne Suites gagnées</th>
-                    <th class="px-4 py-2">Moyenne Chouettes velues perdues</th>
+                    <th class="px-4 py-2">Moyenne Suites gagnées %</th>
+                    <th class="px-4 py-2">Moyenne Chouettes velues perdues %</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,10 +56,10 @@
                     <td class="border px-4 py-2"><%= joueur.getSexe() %></td>
                     <td class="border px-4 py-2"><%= joueur.getJoueursPartieList().size() %></td>
                     <td class="border px-4 py-2"><%= joueur.getNbVictoires() %></td>
-                    <td class="border px-4 py-2"><%= joueur.getNbMoyenVictoires() %></td>
+                    <td class="border px-4 py-2"><%= joueur.getNbMoyenVictoires() * 100 %></td>
                     <td class="border px-4 py-2"><%= joueur.getScoreMoyen() %></td>
-                    <td class="border px-4 py-2"><%= joueur.getMoySuitesGagnees() %></td>
-                    <td class="border px-4 py-2"><%= joueur.getMoyCvPerdues() %></td>
+                    <td class="border px-4 py-2"><%= joueur.getMoySuitesGagnees() * 100 %></td>
+                    <td class="border px-4 py-2"><%= joueur.getMoyCvPerdues() * 100 %></td>
                 </tr>
                 <% } %>
             </tbody>
