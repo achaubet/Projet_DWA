@@ -3,8 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 const hostname = window.location.hostname;
+const path = window.location.pathname;
+const pathParts = path.split('/');
+const desiredPart = pathParts[1];
 console.log(hostname);
-const socket = new WebSocket("ws://" + hostname + ":8080/ProjetCulDeChouette/LobbyWS");
+console.log(path)
+const socket = new WebSocket("ws://" + hostname + ":8080/"+ desiredPart +"/LobbyWS");
 let firstUser;
 let hasInvited = false;
 // @OnOpen

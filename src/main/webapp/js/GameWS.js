@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
-
-const ws = new WebSocket("ws://" + window.location.hostname + ":8080/ProjetCulDeChouette/CulDeChouetteWS");
+const path = window.location.pathname;
+const pathParts = path.split('/');
+const desiredPart = pathParts[1];
+const ws = new WebSocket("ws://" + window.location.hostname + ":8080/"+ desiredPart +"/CulDeChouetteWS");
 const grelotteBtn = document.getElementById("grelotte-picotte-btn");
 const caillouBtn = document.getElementById("pas-mou-caillou-btn");
 
