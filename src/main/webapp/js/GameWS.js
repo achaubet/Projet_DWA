@@ -75,19 +75,31 @@ ws.addEventListener("message", (event) => {
     if(message.type === "spectatorMode") {
         document.getElementById("roll-chouette-btn").hidden = true;
         document.getElementById("roll-cul-btn").hidden = true;
-        document.getElementById("roll-chouette-btn").hidden = true;
-        document.getElementById("roll-cul-btn").hidden = true;    
+        grelotteBtn.hidden = true;
+        caillouBtn.hidden = true;    
         grelotteBtn.classList.remove('bg-blue-500');
         grelotteBtn.classList.remove('hover:bg-blue-700');
         caillouBtn.classList.remove('bg-blue-500');
         caillouBtn.classList.remove('hover:bg-blue-700');
-        
     }
     if(message.type === "endGame") {
         console.log("Partie terminée !");
         swal.fire({
             title: 'La partie est terminée !',
             icon: 'info',
+            showDenyButton: false,
+            showCancelButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            window.location.href = "PageAccueil.jsp";
+        });
+    }
+    if(message.type === "userHasDisconnected") {
+        swal.fire({
+            title: 'Un joueur c\'est déconnecté de la partie !',
+            icon: 'error',
             showDenyButton: false,
             showCancelButton: false,
             allowOutsideClick: false,

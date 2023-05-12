@@ -76,11 +76,21 @@
             console.log(maxScore);
             //console.log(sortedTextArray);
             //console.log(userList.innerHTML);
-            socket.send(JSON.stringify({ 
-                message: "redirectToGame", 
-                sortedUsers: usersListSortedLeader,
-                maxScore: maxScore
-            }));
+            if(usersListSortedLeader.length <= 1) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Il faut au moins deux joueurs pour commencer une partie'
+                }).then((evnt) => {
+                    window.location.href = "PageAccueil.jsp";
+                });
+            } else {
+                socket.send(JSON.stringify({ 
+                    message: "redirectToGame", 
+                    sortedUsers: usersListSortedLeader,
+                    maxScore: maxScore
+                }));
+            }
         });
     </script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/LobbyWS.js"></script>

@@ -205,6 +205,13 @@ public class CulDeChouetteWS {
             Map.Entry<String, Session> entry = iterator.next();
             if(entry.getValue().equals(session)) {
                 iterator.remove();
+                // Un utilisateur s'en va, on déconnecte tout le monde
+                JsonObject endGame = Json.createObjectBuilder()
+                    .add("type", "userHasDisconnected")
+                    .build();
+                for(Session player : players.values()) {
+                    player.getBasicRemote().sendText(endGame.toString());
+                }
             }
         }
         if(players.isEmpty()) {
