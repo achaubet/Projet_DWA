@@ -55,6 +55,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <% if (username != null) { %>
     <script>
         setInterval(function() {
             console.log("?");
@@ -72,5 +73,6 @@
             });
         }, 2000);
     </script>
+    <% } %>
 </body>
 </html>
