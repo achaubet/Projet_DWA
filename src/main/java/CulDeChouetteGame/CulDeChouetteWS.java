@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.Json;
 import static javax.json.Json.createReader;
 import javax.json.JsonArrayBuilder;
@@ -44,10 +46,11 @@ import javax.websocket.server.ServerEndpoint;
 public class CulDeChouetteWS {
     
     private static String actualPlayer = null;
-    private static ConcurrentHashMap<String, Session> players = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<String, Integer> scoreboard = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Session> players = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Integer> scoreboard = new ConcurrentHashMap<>();
     private static ArrayList<String> playerOrder = null;
     private static final ArrayList<String> interaction = new ArrayList<>();
+    private static final ArrayList<Session> spectators = new ArrayList<>();
     
     static {
         playerOrder = Game.playerOrder;
@@ -77,15 +80,25 @@ public class CulDeChouetteWS {
         if(jsonObject.containsKey("username")) {
             String username = jsonObject.getString("username");
             System.out.println(username);
-            players.put(username, session);
-            scoreboard.put(username, 0);
             JsonObject firstUserToPlay = Json.createObjectBuilder()
                 .add("type", "actualPlayer")
                 .add("player", actualPlayer)
                 .build();
-            String messageString = firstUserToPlay.toString();
-            session.getBasicRemote().sendText(messageString);
-            updateScoreboard();
+            if(playerOrder.contains(username)) {
+                players.put(username, session);
+                scoreboard.put(username, 0);
+                String messageString = firstUserToPlay.toString();
+                session.getBasicRemote().sendText(messageString);
+                updateScoreboard();
+            } else {
+                spectators.add(session);
+                JsonObject specMode = Json.createObjectBuilder()
+                            .add("type", "spectatorMode")
+                            .build();
+                String specModeStr = specMode.toString();
+                session.getBasicRemote().sendText(specModeStr);
+                updateScoreboard();
+            }
         }
         if(jsonObject.containsKey("message")) {
             switch(jsonObject.getString("message")) {
@@ -102,6 +115,13 @@ public class CulDeChouetteWS {
                     for(Session player: players.values()) {
                         player.getBasicRemote().sendText(serialJsonChouetteResult);
                     }
+                    spectators.forEach((spectator) -> {
+                        try {
+                            spectator.getBasicRemote().sendText(serialJsonChouetteResult);
+                        } catch (IOException ex) {
+                            Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
                     break;
                 case "rollDiceCul":
                     int dice3 = Game.rollDice();
@@ -113,6 +133,13 @@ public class CulDeChouetteWS {
                     for(Session player: players.values()) {
                         player.getBasicRemote().sendText(serialJsonCulResult);
                     }
+                    spectators.forEach((spectator) -> {
+                        try {
+                            spectator.getBasicRemote().sendText(serialJsonCulResult);
+                        } catch (IOException ex) {
+                            Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
                     if(Game.detectInteraction()) {
                         if(Game.areConsecutives) {
                             // TODO envoyer message client attente interraction
@@ -183,6 +210,7 @@ public class CulDeChouetteWS {
         if(players.isEmpty()) {
             LobbyWS.resetUserList();
             Game.clearGameData();
+            Game.hasStarted = false;
         }
         System.out.println("onClose: " + close_reason.getReasonPhrase());
     }
@@ -204,6 +232,14 @@ public class CulDeChouetteWS {
         for(Session player : players.values()) {
             player.getBasicRemote().sendText(nextPlayerStr);
         }
+        spectators.forEach((spectator) -> {
+            try {
+                spectator.getBasicRemote().sendText(nextPlayerStr);
+            } catch (IOException ex) {
+                Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
     }
     
     private void playerWinCv(String player) throws IOException, DAOException {
@@ -246,6 +282,13 @@ public class CulDeChouetteWS {
         for(Session player : players.values()) {
             player.getBasicRemote().sendText(scoreboardJson.toString());
         }
+        spectators.forEach((spectator) -> {
+            try {
+                spectator.getBasicRemote().sendText(scoreboardJson.toString());
+            } catch (IOException ex) {
+                Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         if(maxScore >= Game.scoreMax) {
             System.out.println("Partie terminée !");
             if(maxScore > 0) {

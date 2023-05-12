@@ -41,6 +41,14 @@
         <servlet-name>ServletVerifierPseudo</servlet-name>
         <url-pattern>/ServletVerifierPseudo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletPartieDemarre</servlet-name>
+        <servlet-class>CulDeChouetteServlets.ServletPartieDemarre</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletPartieDemarre</servlet-name>
+        <url-pattern>/ServletPartieDemarre</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>PageAccueil.jsp</welcome-file>
     </welcome-file-list>

@@ -132,6 +132,7 @@ public class LobbyWS {
                     for (Map.Entry<String, Session> entry : sessionsHM.entrySet()) {
                         entry.getValue().getBasicRemote().sendText(redirectMessage);
                     }
+                    Game.hasStarted = true;
                     break;
                
             }

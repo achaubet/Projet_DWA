@@ -24,6 +24,7 @@ public class Game {
     public static Boolean areChouetteVelute = false;
     public static int nbCv = 0;
     public static int nbSuites = 0;
+    public static Boolean hasStarted = false;
        
     
     public static int rollDice() {

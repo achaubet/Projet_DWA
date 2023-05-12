@@ -72,6 +72,17 @@ ws.addEventListener("message", (event) => {
         caillouBtn.classList.add('hover:bg-blue-700');
         caillouBtn.addEventListener("click", caillouClickHandler);
     }
+    if(message.type === "spectatorMode") {
+        document.getElementById("roll-chouette-btn").hidden = true;
+        document.getElementById("roll-cul-btn").hidden = true;
+        document.getElementById("roll-chouette-btn").hidden = true;
+        document.getElementById("roll-cul-btn").hidden = true;    
+        grelotteBtn.classList.remove('bg-blue-500');
+        grelotteBtn.classList.remove('hover:bg-blue-700');
+        caillouBtn.classList.remove('bg-blue-500');
+        caillouBtn.classList.remove('hover:bg-blue-700');
+        
+    }
     if(message.type === "endGame") {
         console.log("Partie terminée !");
         swal.fire({

@@ -42,7 +42,7 @@
                     Se connecter
                 </a>
             <% } else { %>
-                <a href="Lobby.jsp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">
+                <a href="Lobby.jsp" id="lobby" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">
                     Rejoindre le Lobby
                 </a>
                 <a href="ModifierCompte.jsp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2 focus:outline-none focus:shadow-outline">
@@ -54,5 +54,23 @@
             </a>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        setInterval(function() {
+            console.log("?");
+            $.ajax({
+                url: 'ServletPartieDemarre',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if(response.hasStarted) {
+                        document.getElementById("lobby").hidden = true;
+                    } else {
+                        document.getElementById("lobby").hidden = false;
+                    }
+                }
+            });
+        }, 2000);
+    </script>
 </body>
 </html>
