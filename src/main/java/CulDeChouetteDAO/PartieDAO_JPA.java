@@ -26,6 +26,7 @@ public class PartieDAO_JPA implements IPartie {
             TypedQuery<Integer> queryAdresse = em.createQuery("SELECT MAX(p.codePartie) FROM Partie p", Integer.class);
             Integer maxCodePartie = queryAdresse.getSingleResult();
             if(maxCodePartie != null) {
+                maxCodePartie++;
                 partie.setCodePartie(maxCodePartie);
             } else {
                 partie.setCodePartie(1);

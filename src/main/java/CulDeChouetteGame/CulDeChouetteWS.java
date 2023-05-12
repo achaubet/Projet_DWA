@@ -262,7 +262,41 @@ public class CulDeChouetteWS {
     }
     
     private void persistData() throws DAOException {
-
+        CulDeChouetteDAOFactory factory = AbstractDAOFactory.getDAOFactory(PersistenceKind.JPA);
+        IPartie daoPartie = factory.getDAOPartie();
+        IJoueur daoJoueur = factory.getDAOJoueur();
+        IJoueursPartie daoJp = factory.getDAOJoueursPartie();
+        Partie p = new Partie();
+        p.setDatePartie(new Date());
+        p.setScoreMax(Game.scoreMax);
+        p.setNbCv(Game.nbCv);
+        p.setNbSuites(Game.nbSuites);
+        daoPartie.ajouterPartie(p);
+        for(String player: playerOrder) {
+            int score = scoreboard.get(player);
+            int nbCvPerdues = 0;
+            int nbSuitesGagnees = 0;
+            for(int i = 0; i < Game.chouettesVeluesDataKey.size(); i++) {
+                String currentPlayer = Game.chouettesVeluesDataKey.get(i);
+                boolean cvLost = Game.chouettesVeluesDataObject.get(i);
+                if(currentPlayer.equals(player) && cvLost) {
+                    nbCvPerdues++;
+                }
+            }
+            for(int i = 0; i < Game.suitesDataKey.size(); i++) {
+                String currentPlayer = Game.suitesDataKey.get(i);
+                boolean cvLost = Game.suitesDataObject.get(i);
+                if(currentPlayer.equals(player) && cvLost) {
+                    nbCvPerdues++;
+                }
+            }
+            Joueur j = daoJoueur.rechercherJoueurParPseudo(player);
+            JoueursPartie jp = new JoueursPartie(j.getCodeJoueur(), p.getCodePartie());
+            jp.setScore(score);
+            jp.setCvPerdues(nbCvPerdues);
+            jp.setSuiteGagnees(nbSuitesGagnees);
+            daoJp.ajouterJoueursPartie(jp);
+        }
     }
     
     public static ArrayList<String> initUserOrder() {

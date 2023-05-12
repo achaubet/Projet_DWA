@@ -66,38 +66,44 @@
         </table>
 <h1 class="text-4xl font-bold text-center mb-8">Statistiques par Parties: </h1>
 <table class="table-auto mx-auto">
-    <thead>
-        <tr>
-            <th class="px-4 py-2">Pseudo</th>
-            <th class="px-4 py-2">Score</th>
-            <th class="px-4 py-2">Suites gagnées</th>
-            <th class="px-4 py-2">Chouettes velues perdues</th>
-        </tr>
-    </thead>
     <tbody>
         <%-- Récupération de toutes les parties dans la base de données --%>
-        <% 
-            IPartie daoPartie = factory.getDAOPartie();
-            IJoueursPartie daoJoueursPartie = factory.getDAOJoueursPartie();
-            List<Partie> parties = daoPartie.rechercherToutesLesParties();
-            for(Partie partie : parties) {
-        %>
-            <h1 class="text-4xl font-bold text-center mb-8">Partie N°<%= partie.getCodePartie() %></h1>
-        <%
+<%
+    IPartie daoPartie = factory.getDAOPartie();
+    IJoueursPartie daoJoueursPartie = factory.getDAOJoueursPartie();
+    List<Partie> parties = daoPartie.rechercherToutesLesParties();
+    for (Partie partie : parties) {
+%>
+    <h1 class="text-4xl font-bold text-center mb-8">Partie N°<%= partie.getCodePartie() %></h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Score</th>
+                <th>Suites gagnées</th>
+                <th>Chouettes velues perdues</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% 
                 List<JoueursPartie> joueursPartie = daoJoueursPartie.rechercherJoueursPartieParCodePartie(partie.getCodePartie());
-                for(JoueursPartie joueurP : joueursPartie) {
+                for (JoueursPartie joueurP : joueursPartie) {
                     Joueur joueur = daoJoueur.rechercherJoueurParId(joueurP.getJoueursPartiePK().getCodeJoueur());
-        %>
-        <tr>
-            <td class="border px-4 py-2"><%= joueur.getPseudo() %></td>
-            <td class="border px-4 py-2"><%= joueurP.getScore() %></td>
-            <td class="border px-4 py-2"><%= joueurP.getSuiteGagnees() %></td>
-            <td class="border px-4 py-2"><%= joueurP.getCvPerdues() %></td>
-        </tr>
-        <% 
+            %>
+            <tr>
+                <td class="border px-4 py-2"><%= joueur.getPseudo() %></td>
+                <td class="border px-4 py-2"><%= joueurP.getScore() %></td>
+                <td class="border px-4 py-2"><%= joueurP.getSuiteGagnees() %></td>
+                <td class="border px-4 py-2"><%= joueurP.getCvPerdues() %></td>
+            </tr>
+            <% 
                 }
-            }
-        %>
+            %>
+        </tbody>
+    </table>
+<% 
+    }
+%>
     </tbody>
 </table>
         <div class="flex justify-center mt-8">

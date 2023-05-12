@@ -6,8 +6,6 @@ package CulDeChouetteGame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -18,8 +16,10 @@ public class Game {
     public static int scoreMax = 343;
     public static ArrayList<String> playerOrder = new ArrayList<>();
     public static ArrayList<Integer> lastPlayerResults = new ArrayList<>();
-    public static ConcurrentHashMap<String, Boolean> chouettesVeluesData = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, Boolean> suitesData = new ConcurrentHashMap<>();
+    public static ArrayList<String> chouettesVeluesDataKey = new ArrayList<>();
+    public static ArrayList<Boolean> chouettesVeluesDataObject = new ArrayList<>();
+    public static ArrayList<String> suitesDataKey = new ArrayList<>();
+    public static ArrayList<Boolean> suitesDataObject = new ArrayList<>();
     public static Boolean areConsecutives = false;
     public static Boolean areChouetteVelute = false;
     public static int nbCv = 0;
@@ -78,19 +78,27 @@ public class Game {
     }
     
     public static void setChouetteVelueWinner(String winnerPlayername) {
-        chouettesVeluesData.put(winnerPlayername, true);
+        //chouettesVeluesData.put(winnerPlayername, true);
+        chouettesVeluesDataKey.add(winnerPlayername);
+        chouettesVeluesDataObject.add(true);
         for(String player: playerOrder) {
             if(!player.equals(winnerPlayername)) {
-                chouettesVeluesData.put(player, false);
+                //chouettesVeluesData.put(player, false);
+                chouettesVeluesDataKey.add(winnerPlayername);
+                chouettesVeluesDataObject.add(false);
             }
         }
     }
     
     public static void setSuiteLoose(String loosePlayername) {
-        suitesData.put(loosePlayername, false);
+        //suitesData.put(loosePlayername, false);
+        suitesDataKey.add(loosePlayername);
+        suitesDataObject.add(false);
         for(String player: playerOrder) {
             if(!player.equals(loosePlayername)) {
-                suitesData.put(player, true);
+                // suitesData.put(player, true);
+                suitesDataKey.add(player);
+                suitesDataObject.add(true);
             }
         }
     }
@@ -98,8 +106,10 @@ public class Game {
     public static void clearGameData() {
         playerOrder.clear();
         lastPlayerResults.clear();
-        chouettesVeluesData.clear();
-        suitesData.clear();
+        chouettesVeluesDataKey.clear();
+        chouettesVeluesDataObject.clear();
+        suitesDataKey.clear();
+        suitesDataObject.clear();
         nbCv = 0;
         nbSuites= 0;
     }
