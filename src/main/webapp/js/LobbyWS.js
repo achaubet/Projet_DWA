@@ -7,6 +7,7 @@ const path = window.location.pathname; // Chemin
 const pathParts = path.split('/');
 const directory = pathParts[1]; // Dossier principal du projet
 const socket = new WebSocket("ws://" + hostname + ":8080/"+ directory +"/LobbyWS");
+const scoreMaxInput = document.getElementById('score-max-input');
 let firstUser;
 let hasInvited = false;
 // @OnOpen
@@ -206,5 +207,14 @@ function updateUserList(){
     socket.send(JSON.stringify({message: "requestUpdateUserList"}));
 }
 
+scoreMaxInput.addEventListener('input', () => {
+    const value = scoreMaxInput.value.trim();
+
+    if (value === '' || isNaN(value) || parseInt(value) < 1) {
+        startPartyBtn.setAttribute('hidden', '');
+    } else {
+        startPartyBtn.removeAttribute('hidden');
+    }
+});
 // setInterval(updateUserList, 20000); // Set time to 20s otherwise the leader doesn't have the time to select the players 
 

@@ -100,7 +100,7 @@ ws.addEventListener("message", (event) => {
     }
     if(message.type === "userHasDisconnected") {
         swal.fire({
-            title: 'Un joueur c\'est déconnecté de la partie !',
+            title: 'Un joueur s\'est déconnecté de la partie !',
             icon: 'error',
             showDenyButton: false,
             showCancelButton: false,
