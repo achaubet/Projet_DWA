@@ -4,8 +4,8 @@
  */
 const path = window.location.pathname;
 const pathParts = path.split('/');
-const desiredPart = pathParts[1];
-const ws = new WebSocket("ws://" + window.location.hostname + ":8080/"+ desiredPart +"/CulDeChouetteWS");
+const directory = pathParts[1];
+const ws = new WebSocket("ws://" + window.location.hostname + ":8080/"+ directory +"/CulDeChouetteWS");
 const grelotteBtn = document.getElementById("grelotte-picotte-btn");
 const caillouBtn = document.getElementById("pas-mou-caillou-btn");
 
@@ -110,7 +110,21 @@ ws.addEventListener("message", (event) => {
         }).then(() => {
             window.location.href = "PageAccueil.jsp";
         });
+    }    
+    if(message.type === "serverError") {
+        swal.fire({
+            title: 'Une erreur interne s\'est produite !',
+            icon: 'error',
+            showDenyButton: false,
+            showCancelButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            window.location.href = "PageAccueil.jsp";
+        });
     }
+    
 });
 
 const grelotteClickHandler = () => {

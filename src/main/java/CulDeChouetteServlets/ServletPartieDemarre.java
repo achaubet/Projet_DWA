@@ -57,7 +57,6 @@ public class ServletPartieDemarre extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)            
             throws ServletException, IOException {
-        System.out.println("GET DATA");
         Boolean partyHasStarted = CulDeChouetteGame.Game.hasStarted;            
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

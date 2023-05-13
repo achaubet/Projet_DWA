@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.Json;
 import static javax.json.Json.createReader;
 import javax.json.JsonArray;
@@ -161,7 +163,19 @@ public class LobbyWS {
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.out.println("onError: " + throwable.getMessage());
+        System.err.println("onError: " + throwable.getMessage());
+        System.err.println("Une erreur est survenue! ");
+        JsonObject errorMsg = Json.createObjectBuilder()
+            .add("type", "serverError")
+            .build();
+        String errorMsgStr = errorMsg.toString();
+        for(Session player: sessionsHM.values()) {
+            try {
+                player.getBasicRemote().sendText(errorMsgStr);
+            } catch (IOException ex) {
+                Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     

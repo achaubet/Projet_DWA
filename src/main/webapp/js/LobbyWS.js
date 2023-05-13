@@ -2,13 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
-const hostname = window.location.hostname;
-const path = window.location.pathname;
+const hostname = window.location.hostname; // Nom de l'hôte
+const path = window.location.pathname; // Chemin
 const pathParts = path.split('/');
-const desiredPart = pathParts[1];
-console.log(hostname);
-console.log(path)
-const socket = new WebSocket("ws://" + hostname + ":8080/"+ desiredPart +"/LobbyWS");
+const directory = pathParts[1]; // Dossier principal du projet
+const socket = new WebSocket("ws://" + hostname + ":8080/"+ directory +"/LobbyWS");
 let firstUser;
 let hasInvited = false;
 // @OnOpen
@@ -117,7 +115,6 @@ socket.addEventListener("message", (event) => {
                     break;
             }
         });
-
         timer = setTimeout(function() {
             swal.close();
             window.location.href = "PageAccueil.jsp";
@@ -137,6 +134,19 @@ socket.addEventListener("message", (event) => {
     }
     if(message.type === "redirectToHomepage") {
         window.location.href = "PageAccueil.jsp";
+    }
+    if(message.type === "serverError") {
+        swal.fire({
+            title: 'Une erreur interne s\'est produite !',
+            icon: 'error',
+            showDenyButton: false,
+            showCancelButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            window.location.href = "PageAccueil.jsp";
+        });
     }
 });
 

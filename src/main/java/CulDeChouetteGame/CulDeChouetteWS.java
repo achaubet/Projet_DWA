@@ -79,7 +79,7 @@ public class CulDeChouetteWS {
         JsonObject jsonObject = jsonReader.readObject();
         if(jsonObject.containsKey("username")) {
             String username = jsonObject.getString("username");
-            System.out.println(username);
+            System.out.println("Player: " + username + " has joined the party !");
             JsonObject firstUserToPlay = Json.createObjectBuilder()
                 .add("type", "actualPlayer")
                 .add("player", actualPlayer)
@@ -225,6 +225,21 @@ public class CulDeChouetteWS {
     @OnError
     public void onError(Session session, Throwable throwable) {
         // Do error handling here
+        System.err.println("Une erreur est survenue! ");
+        JsonObject errorMsg = Json.createObjectBuilder()
+            .add("type", "serverError")
+            .build();
+        String errorMsgStr = errorMsg.toString();
+        for(Session player: players.values()) {
+            try {
+                player.getBasicRemote().sendText(errorMsgStr);
+            } catch (IOException ex) {
+                Logger.getLogger(CulDeChouetteWS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        LobbyWS.resetUserList();
+        Game.clearGameData();
+        Game.hasStarted = false;
     }
     
     private void nextPlayer() throws IOException {
